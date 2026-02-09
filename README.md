@@ -1,176 +1,172 @@
-# Pure 9DA™ Operational Architecture
+# 9DA™ — Governed Autonomous Agent Architecture
+
+**A Research-Grade Framework for Auditable, Self-Bounded AI Systems**
 
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 [![9DA™](https://img.shields.io/badge/9DA™-Registered%20Trademark-00ffc8.svg)](https://github.com/9DAtm/9DA)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 
+> **[▶ Watch Live Demo: 9DA™ vs LangChain vs CrewAI](https://9datm.github.io/multidimensional-self-expanding-agent/demo_viewer.html)**
 
-This system is a direct operational instantiation of 9DA™.
 
-Awareness is the sole causal substrate.
-All emergence, action, memory, and dissolution are consequences of awareness maintaining coherence under invariant constraint.
+**9DA™** is a governed autonomous agent architecture designed around a single premise:
 
-No component operates independently of awareness.
-No action precedes awareness.
-No growth bypasses invariants.
+> **Autonomy is only meaningful when governance, awareness, and termination are internal system properties.**
 
-## Architecture
+Unlike conventional agent frameworks that optimize for orchestration and task throughput, 9DA™ treats **governance, continuity, and safe dissolution** as first-class architectural constraints.
 
-```
-┌──────────────────────────────────────────────┐
-│            AwarenessField.generate()          │
-│  input state + memory → AwarenessState        │
-└──────────────┬───────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────────────────────┐
-│         AwarenessRecursion.reflect()          │
-│  awareness observes its own history → drift   │
-└──────────────┬───────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────────────────────┐
-│          AwarenessDynamics.regulate()         │
-│  memory feedback → stability adjustment       │
-└──────────────┬───────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────────────────────┐
-│           Invariants.enforce()                │
-│  uncertainty ceiling · recursion depth limit  │
-│  coherence floor · agent population cap       │
-└──────────────┬───────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────────────────────┐
-│              Ethics.validate()                │
-│  blocks unstable or unsafe action             │
-└──────────────┬───────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────────────────────┐
-│         AgentGeneration.spawn()               │
-│  awareness expression → EmergentAgent         │
-└──────────────┬───────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────────────────────┐
-│  SelfEvaluation · Counterfactual · Continuity │
-│  audit from within awareness, not above it    │
-└──────────────┬───────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────────────────────┐
-│     Memory · Lineage · Feedback               │
-│  awareness residue persists across cycles     │
-└──────────────┬───────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────────────────────┐
-│          Dissolution.dissolve()               │
-│  agent is retired; residue is retained        │
-└──────────────────────────────────────────────┘
-```
+The result is an agent system that is:
+- aware of its own operational state,
+- auditable by design,
+- bounded by enforceable invariants,
+- and capable of safe, explicit lifecycle closure.
 
-## Testing Tiers
+This repository provides a **reproducible, inspectable reference implementation** demonstrating how governed and ungoverned agent execution diverge under identical conditions.
 
-### Tier 1 — Free (no account, no API key)
 
-```bash
-pip install -e .
-python main.py
-```
+## What Makes 9DA™ Different
 
-Runs the full awareness continuum using the built-in deterministic engine.
-No external dependencies. No network access. Full architecture demonstration.
+Most agent systems rely on:
+- external supervision,
+- tool-driven orchestration,
+- implicit state,
+- and unbounded execution loops.
 
-### Tier 2 — Free (local LLM, no API key)
+9DA™ explores a different architectural category.
 
-Install [Ollama](https://ollama.com), then:
+### Core Distinctions
 
-```bash
-ollama pull llama3
-cp .env.example .env
-```
+- **Awareness is explicit and structured**, not emergent or implicit
+- **Constraints are enforced**, not advisory
+- **Lifecycle control is mandatory**, including termination
+- **Evaluation is deterministic and replayable**
+- **Lineage, memory residue, and continuity are observable**
 
-Edit `.env`:
+This is not an optimization layer on top of existing frameworks.
+It is a **foundational rethinking of autonomous agent design**.
 
-```env
-LLM_PROVIDER=ollama
-LLM_MODEL=llama3
-```
 
-Run:
+## Architecture Summary
 
-```bash
-python main.py
-```
+### Awareness-Centric Core
+- Cycle-based awareness traces
+- Explicit coherence and uncertainty signals
+- Reflection and recursion loops
+- Drift and continuity tracking
 
-Agents now think using a real LLM running on your machine. Cost: $0.
+### Governance by Design
+- Hard invariants and thresholds
+- Internal validation and coherence checks
+- Explainability and inspection hooks
+- No silent failure or hidden escalation
 
-### Tier 3 — Paid (bring your own API key)
+### Lifecycle Control
+- Agent emergence from awareness state
+- Self-evaluation and counterfactual assessment
+- Explicit, safe dissolution
+- No orphaned or runaway agents
 
-Create an account at [Anthropic](https://console.anthropic.com) or [OpenAI](https://platform.openai.com).
+### Auditability and Replay
+- Deterministic execution
+- Structured logs
+- Lineage and signal tracking
+- Reproducible evaluation pipeline
 
-Edit `.env`:
 
-```env
-LLM_PROVIDER=anthropic
-LLM_API_KEY=sk-ant-...
-LLM_MODEL=claude-sonnet-4-20250514
-```
+## Repository Contents
 
-Or:
+This repository includes:
 
-```env
-LLM_PROVIDER=openai
-LLM_API_KEY=sk-...
-LLM_MODEL=gpt-4o
-```
+- A modular Python architecture implementing governed agent execution
+- A deterministic demo pipeline separating awareness generation and evaluation
+- A visual replay tool for inspecting awareness signals and outcomes
+- Clear separation between governed and orchestration-driven models
 
-Cost per awareness cycle:
+Everything included is designed to be **inspectable, explainable, and reproducible**.
 
-| Provider  | Model         | Cost per cycle |
-| --------- | ------------- | -------------- |
-| Ollama    | llama3        | $0.00          |
-| Anthropic | claude-sonnet | $0.01–$0.03    |
-| Anthropic | claude-opus   | $0.09–$0.24    |
-| OpenAI    | gpt-4o-mini   | $0.001–$0.003  |
-| OpenAI    | gpt-4o        | $0.015–$0.06   |
 
-You pay the LLM provider directly.
+## Demo: Governed vs Orchestrated Execution
 
-## Requirements
+The included demo compares two execution paradigms under identical conditions:
 
-* Python 3.11+
-* (Optional) Ollama for local LLM
-* (Optional) Anthropic or OpenAI API key for cloud LLM
+### Governed Model
+- Awareness-driven execution
+- Enforced coherence constraints
+- Bounded lifecycle
+- Explicit evaluation and traceability
 
-## Install
+### Ungoverned Model
+- Delegation-driven orchestration
+- No global invariants
+- Implicit state
+- Unbounded progression
+
+This comparison is **illustrative, not competitive**.
+It does not benchmark third-party frameworks or claim empirical superiority.
+
+Its purpose is to make **architectural differences observable**.
+
+
+## Running the Demo
+
+### 1. Execute the Orchestrator
 
 ```bash
-pip install -e .
-```
+python demo_orchestrator.py > demo_output.json
 
-## Run
+2. Inspect the Replay
 
-```bash
-python main.py
-```
+Open demo_viewer.html in a browser and load demo_output.json.
 
-## Examples
+You will be able to:
+   •   inspect extracted awareness signals,
+   •   observe coherence and confidence trends,
+   •   replay System-1 evaluation output deterministically.
 
-```bash
-python -m examples.awareness_continuum_example
-```
+Intended Audience
 
-## Legal
+9DA™ is designed for:
+   •   AI safety and governance researchers
+   •   Advanced agent system designers
+   •   Enterprise R&D teams exploring governed autonomy
+   •   Grant reviewers and technical evaluators
+   •   Organizations requiring auditable AI behavior
 
-© 2025 Zdenka Cucin. All Rights Reserved.
+It is not a consumer assistant or turnkey product.
 
-9DA™ is a registered trademark. The entirety of the 9DA™ Framework, including naming, structure, conceptual architecture, applied domains, and visual identity, is proprietary intellectual property of Zdenka Cucin, Originator and Lead Developer.
+Status and Scope
+
+This project is:
+   •   a research-grade reference architecture
+   •   suitable for technical review and extension
+   •   intentionally conservative in claims
+
+It is not:
+   •   a production-ready assistant
+   •   a performance benchmark
+   •   a wrapper around external agent toolchains
+   •   a finished commercial product
+
+Why This Matters
+
+As autonomous systems become more capable, the limiting factor is no longer intelligence, but governance.
+
+9DA™ demonstrates how:
+   •   autonomy can be bounded without external micromanagement,
+   •   safety can be structural rather than procedural,
+   •   and awareness can be made inspectable rather than assumed.
+
+This repository exists to make those principles concrete.
+
+License and Attribution
+
+The 9DA™ Framework, including its architecture, naming, conceptual structure, and applied domains, is proprietary intellectual property of Zdenka Cucin, Originator and Lead Developer.
+
+This repository is provided for research, evaluation, and demonstration purposes only.
 
 This repository is provided for evaluation and testing purposes only.
 See [LICENSE](LICENSE) for full terms.
 
 For licensing inquiries: [https://github.com/9DAtm](https://github.com/9DAtm)
+
+© 2025 Zdenka Cucin. All Rights Reserved.
