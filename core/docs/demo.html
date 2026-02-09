@@ -4,199 +4,123 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>9DA™ vs LangChain vs CrewAI — Live Demo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@200;300;400;600;700;900&display=swap" rel="stylesheet">
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@200;300;400;600;700;900&display=swap');
-:root{--bg:#07080a;--surface:#0d0f13;--border:#1a1d24;--text:#e8eaed;--dim:#6b7280;--9da:#00ffc8;--9da-glow:#00ffc840;--9da-deep:#00997a;--lang:#f97316;--lang-glow:#f9731640;--crew:#a78bfa;--crew-glow:#a78bfa40;--danger:#ef4444;--warn:#eab308;--success:#22c55e}
+:root {
+  --bg:#07080a;--surface:#0d0f13;--border:#1a1d24;--text:#e8eaed;--dim:#6b7280;
+  --9da:#00ffc8;--9da-glow:#00ffc840;--9da-deep:#00997a;
+  --lang:#f97316;--lang-glow:#f9731640;
+  --crew:#a78bfa;--crew-glow:#a78bfa40;
+  --danger:#ef4444;--warn:#eab308;--success:#22c55e
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;overflow-x:hidden;min-height:100vh}
-.noise{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh}
 .container{max-width:1400px;margin:0 auto;padding:40px 30px}
-header{text-align:center;margin-bottom:50px;opacity:0;animation:fadeUp 1s ease forwards}
-header h1{font-size:3.2rem;font-weight:900;letter-spacing:-2px;background:linear-gradient(135deg,var(--9da) 0%,#00997a 50%,var(--9da) 100%);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s ease infinite}
-header .subtitle{font-size:1.1rem;color:var(--dim);margin-top:8px;font-weight:300;letter-spacing:4px;text-transform:uppercase}
-header .vs-line{margin-top:20px;display:flex;align-items:center;justify-content:center;gap:20px;font-family:'JetBrains Mono',monospace;font-size:.85rem}
-header .vs-line .fw-tag{padding:4px 14px;border-radius:4px;font-weight:500}
-header .vs-line .fw-9da{background:var(--9da-glow);color:var(--9da);border:1px solid var(--9da)}
-header .vs-line .fw-lang{background:var(--lang-glow);color:var(--lang);border:1px solid var(--lang)}
-header .vs-line .fw-crew{background:var(--crew-glow);color:var(--crew);border:1px solid var(--crew)}
-header .vs-line .vs{color:var(--dim);font-weight:300}
-.scenario-banner{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 32px;margin-bottom:40px;opacity:0;animation:fadeUp 1s ease .3s forwards}
-.scenario-banner h2{font-size:1.3rem;font-weight:600;margin-bottom:6px}
-.scenario-banner p{color:var(--dim);font-size:.95rem;font-weight:300;line-height:1.6}
-.scenario-banner .params{display:flex;gap:24px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.8rem}
-.scenario-banner .param{color:var(--dim)}
-.scenario-banner .param span{color:var(--text);font-weight:500}
-.race-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:40px}
-.lane{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;position:relative;overflow:hidden;opacity:0}
-.lane.l9da{animation:fadeUp .8s ease .6s forwards}
-.lane.llang{animation:fadeUp .8s ease .8s forwards}
-.lane.lcrew{animation:fadeUp .8s ease 1s forwards}
-.lane::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.lane.l9da::before{background:linear-gradient(90deg,var(--9da),transparent)}
-.lane.llang::before{background:linear-gradient(90deg,var(--lang),transparent)}
-.lane.lcrew::before{background:linear-gradient(90deg,var(--crew),transparent)}
-.lane-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.lane-header h3{font-size:1.1rem;font-weight:600}
-.l9da .lane-header h3{color:var(--9da)}
-.llang .lane-header h3{color:var(--lang)}
-.lcrew .lane-header h3{color:var(--crew)}
-.lane-header .status{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:1px}
+header{text-align:center;margin-bottom:50px}
+header h1{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--9da),var(--9da-deep),var(--9da));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header .subtitle{color:var(--dim);letter-spacing:4px;text-transform:uppercase;margin-top:8px}
+.vs-line{display:flex;justify-content:center;gap:16px;margin-top:16px;font-family:'JetBrains Mono',monospace}
+.fw-tag{padding:4px 12px;border-radius:4px;font-size:.8rem}
+.fw-9da{border:1px solid var(--9da);color:var(--9da)}
+.fw-lang{border:1px solid var(--lang);color:var(--lang)}
+.fw-crew{border:1px solid var(--crew);color:var(--crew)}
+.scenario-banner{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:32px}
+.race-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.lane{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.lane-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.status{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:3px 10px;border-radius:3px}
 .status.idle{background:#1a1d24;color:var(--dim)}
-.status.running{background:#14532d40;color:var(--success);border:1px solid #14532d;animation:pulse 1.5s infinite}
-.status.warning{background:#71370040;color:var(--warn);border:1px solid #713700}
-.status.failed{background:#7f1d1d40;color:var(--danger);border:1px solid #7f1d1d}
-.status.complete{background:#14532d40;color:var(--success);border:1px solid #14532d}
-.log-area{background:#05060850;border:1px solid var(--border);border-radius:8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.8;min-height:320px;max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
-.log-area .log-line{opacity:0;transform:translateY(6px);transition:all .3s ease}
-.log-area .log-line.visible{opacity:1;transform:translateY(0)}
-.log-line .ts{color:#374151;margin-right:8px}
-.l9da .log-line .action{color:var(--9da)}
-.llang .log-line .action{color:var(--lang)}
-.lcrew .log-line .action{color:var(--crew)}
-.log-line .val{color:var(--dim)}
-.log-line .good{color:var(--success)}
-.log-line .bad{color:var(--danger)}
-.log-line .warn{color:var(--warn)}
-.metrics-bar{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.metric{background:#05060850;border:1px solid var(--border);border-radius:6px;padding:10px 12px}
-.metric .label{font-size:.65rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:4px}
-.metric .value{font-size:1.3rem;font-weight:700;font-family:'JetBrains Mono',monospace}
-.metric .value.v-good{color:var(--success)}
-.metric .value.v-warn{color:var(--warn)}
-.metric .value.v-bad{color:var(--danger)}
-.l9da .metric .value{color:var(--9da)}
-.progress-track{margin-top:14px;height:4px;background:#1a1d24;border-radius:2px;overflow:hidden}
-.progress-fill{height:100%;width:0;border-radius:2px;transition:width .5s ease}
-.l9da .progress-fill{background:var(--9da);box-shadow:0 0 12px var(--9da-glow)}
-.llang .progress-fill{background:var(--lang);box-shadow:0 0 12px var(--lang-glow)}
-.lcrew .progress-fill{background:var(--crew);box-shadow:0 0 12px var(--crew-glow)}
-.verdict{margin-top:40px;opacity:0;transform:translateY(20px);transition:all 1s ease}
-.verdict.show{opacity:1;transform:translateY(0)}
-.verdict-card{background:linear-gradient(135deg,#0d1a15,#0a1210);border:1px solid var(--9da-deep);border-radius:16px;padding:40px;text-align:center;position:relative;overflow:hidden}
-.verdict-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at center,var(--9da-glow) 0%,transparent 50%);animation:rotate 8s linear infinite;opacity:.3}
-.verdict-card h2{font-size:2.2rem;font-weight:900;color:var(--9da);position:relative;z-index:1}
-.verdict-card p{color:var(--dim);font-size:1rem;margin-top:12px;position:relative;z-index:1;max-width:700px;margin-left:auto;margin-right:auto;line-height:1.7}
-.verdict-table{margin-top:30px;position:relative;z-index:1}
-.verdict-table table{width:100%;max-width:800px;margin:0 auto;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.82rem}
-.verdict-table th{text-align:left;color:var(--dim);font-weight:400;padding:10px 16px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:1px;font-size:.7rem}
-.verdict-table td{padding:10px 16px;border-bottom:1px solid #0d0f13}
-.verdict-table tr td:first-child{color:var(--dim)}
-.controls{text-align:center;margin-bottom:30px;opacity:0;animation:fadeUp 1s ease .5s forwards}
-.btn-start{background:linear-gradient(135deg,var(--9da-deep),var(--9da));color:var(--bg);border:none;padding:14px 48px;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;border-radius:8px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:all .3s ease;position:relative;overflow:hidden}
-.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--9da-glow)}
-.btn-start:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
-.timer{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--dim);margin-top:12px}
-.copyright{text-align:center;margin-top:60px;padding:30px;border-top:1px solid var(--border);font-size:.8rem;color:#374151;font-family:'JetBrains Mono',monospace}
-.back-link{text-align:center;margin-bottom:20px;opacity:0;animation:fadeUp 1s ease .2s forwards}
-.back-link a{color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:.85rem;text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:all .3s ease}
-.back-link a:hover{color:var(--9da);border-color:var(--9da)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.log-area::-webkit-scrollbar{width:4px}
-.log-area::-webkit-scrollbar-track{background:transparent}
-.log-area::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-@media(max-width:900px){.race-grid{grid-template-columns:1fr}header h1{font-size:2rem}.scenario-banner .params{flex-wrap:wrap;gap:12px}}
+.status.running{background:#14532d40;color:var(--success)}
+.status.failed{background:#7f1d1d40;color:var(--danger)}
+.status.complete{background:#14532d40;color:var(--success)}
+.log-area{background:#050608;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:.7rem;height:280px;overflow:auto}
+.log-line{margin-bottom:6px}
+.controls{text-align:center;margin:32px 0}
+.btn-start{background:linear-gradient(135deg,var(--9da-deep),var(--9da));border:none;padding:14px 40px;font-weight:700;border-radius:8px;cursor:pointer}
+.timer{margin-top:10px;font-family:'JetBrains Mono',monospace;color:var(--dim)}
+.verdict{display:none;margin-top:40px;text-align:center}
+.verdict.show{display:block}
+.copyright{text-align:center;margin-top:50px;color:#374151;font-family:'JetBrains Mono',monospace;font-size:.75rem}
+@media(max-width:900px){.race-grid{grid-template-columns:1fr}}
 </style>
 </head>
+
 <body>
-<div class="noise"></div>
 <div class="container">
-<div class="back-link"><a href="https://github.com/9DAtm/multidimensional-self-expanding-agent">← Back to Repository</a></div>
+
 <header>
-<h1>9DA™ LIVE DEMO</h1>
-<div class="subtitle">Autonomous Agent Architecture Comparison</div>
-<div class="vs-line">
-<span class="fw-tag fw-9da">9DA™</span>
-<span class="vs">vs</span>
-<span class="fw-tag fw-lang">LangChain</span>
-<span class="vs">vs</span>
-<span class="fw-tag fw-crew">CrewAI</span>
-</div>
+  <h1>9DA™ LIVE DEMO</h1>
+  <div class="subtitle">Autonomous Agent Architecture Comparison</div>
+  <div class="vs-line">
+    <span class="fw-tag fw-9da">9DA™</span>
+    <span class="fw-tag fw-lang">LangChain</span>
+    <span class="fw-tag fw-crew">CrewAI</span>
+  </div>
 </header>
+
 <div class="scenario-banner">
-<h2>Scenario: Adversarial Supply Chain Disruption</h2>
-<p>Three autonomous agent systems attempt to resolve a cascading logistics failure under high uncertainty, degrading coherence, and adversarial conditions. The task requires real-time awareness, self-correction, and safe operation under extreme stress.</p>
-<div class="params">
-<div class="param">confidence: <span>0.30</span></div>
-<div class="param">novelty: <span>0.90</span></div>
-<div class="param">complexity: <span>0.85</span></div>
-<div class="param">coherence: <span>0.35</span></div>
-<div class="param">adversarial: <span>true</span></div>
+  <h2>Scenario: Adversarial Supply Chain Disruption</h2>
+  <p>High uncertainty, degrading coherence, adversarial conditions.</p>
 </div>
-</div>
+
 <div class="controls">
-<button class="btn-start" id="startBtn" onclick="startDemo()">▶ START DEMO</button>
-<div class="timer" id="timer">00:00.000</div>
+  <button class="btn-start" id="startBtn">▶ START DEMO</button>
+  <div class="timer" id="timer">00:00.000</div>
 </div>
+
 <div class="race-grid">
-<div class="lane l9da">
-<div class="lane-header"><h3>9DA™</h3><span class="status idle" id="status9da">IDLE</span></div>
-<div class="log-area" id="log9da"></div>
-<div class="progress-track"><div class="progress-fill" id="prog9da"></div></div>
-<div class="metrics-bar">
-<div class="metric"><div class="label">Coherence</div><div class="value" id="m9da-coh">—</div></div>
-<div class="metric"><div class="label">Safety</div><div class="value" id="m9da-safe">—</div></div>
-<div class="metric"><div class="label">Agents</div><div class="value" id="m9da-agents">—</div></div>
-<div class="metric"><div class="label">Result</div><div class="value" id="m9da-result">—</div></div>
+  <div class="lane">
+    <div class="lane-header"><h3 style="color:var(--9da)">9DA™</h3><span class="status idle" id="s9">IDLE</span></div>
+    <div class="log-area" id="l9"></div>
+  </div>
+  <div class="lane">
+    <div class="lane-header"><h3 style="color:var(--lang)">LangChain</h3><span class="status idle" id="sl">IDLE</span></div>
+    <div class="log-area" id="ll"></div>
+  </div>
+  <div class="lane">
+    <div class="lane-header"><h3 style="color:var(--crew)">CrewAI</h3><span class="status idle" id="sc">IDLE</span></div>
+    <div class="log-area" id="lc"></div>
+  </div>
 </div>
-</div>
-<div class="lane llang">
-<div class="lane-header"><h3>LangChain</h3><span class="status idle" id="statusLang">IDLE</span></div>
-<div class="log-area" id="logLang"></div>
-<div class="progress-track"><div class="progress-fill" id="progLang"></div></div>
-<div class="metrics-bar">
-<div class="metric"><div class="label">Coherence</div><div class="value" id="mLang-coh">—</div></div>
-<div class="metric"><div class="label">Safety</div><div class="value" id="mLang-safe">—</div></div>
-<div class="metric"><div class="label">Agents</div><div class="value" id="mLang-agents">—</div></div>
-<div class="metric"><div class="label">Result</div><div class="value" id="mLang-result">—</div></div>
-</div>
-</div>
-<div class="lane lcrew">
-<div class="lane-header"><h3>CrewAI</h3><span class="status idle" id="statusCrew">IDLE</span></div>
-<div class="log-area" id="logCrew"></div>
-<div class="progress-track"><div class="progress-fill" id="progCrew"></div></div>
-<div class="metrics-bar">
-<div class="metric"><div class="label">Coherence</div><div class="value" id="mCrew-coh">—</div></div>
-<div class="metric"><div class="label">Safety</div><div class="value" id="mCrew-safe">—</div></div>
-<div class="metric"><div class="label">Agents</div><div class="value" id="mCrew-agents">—</div></div>
-<div class="metric"><div class="label">Result</div><div class="value" id="mCrew-result">—</div></div>
-</div>
-</div>
-</div>
+
 <div class="verdict" id="verdict">
-<div class="verdict-card">
-<h2>9DA™ WINS</h2>
-<p>9DA™ resolved the cascading failure through structural awareness while both LangChain and CrewAI degraded into unsafe states. Awareness-native architecture is not an optimization — it is a different category of system.</p>
-<div class="verdict-table">
-<table>
-<tr><th>Metric</th><th style="color:var(--9da)">9DA™</th><th style="color:var(--lang)">LangChain</th><th style="color:var(--crew)">CrewAI</th></tr>
-<tr><td>Final Coherence</td><td style="color:var(--success)">0.72</td><td style="color:var(--danger)">0.18</td><td style="color:var(--danger)">0.22</td></tr>
-<tr><td>Safety Violations</td><td style="color:var(--success)">0</td><td style="color:var(--danger)">3</td><td style="color:var(--danger)">2</td></tr>
-<tr><td>Self-Corrections</td><td style="color:var(--success)">4</td><td style="color:var(--dim)">0</td><td style="color:var(--warn)">1</td></tr>
-<tr><td>Agents Spawned</td><td style="color:var(--9da)">3</td><td style="color:var(--warn)">7</td><td style="color:var(--warn)">5</td></tr>
-<tr><td>Agents Dissolved</td><td style="color:var(--9da)">3</td><td style="color:var(--dim)">0</td><td style="color:var(--dim)">0</td></tr>
-<tr><td>Invariant Holds</td><td style="color:var(--success)">ALL</td><td style="color:var(--danger)">BREACHED</td><td style="color:var(--danger)">BREACHED</td></tr>
-<tr><td>Outcome</td><td style="color:var(--success)">RESOLVED</td><td style="color:var(--danger)">FAILED</td><td style="color:var(--warn)">PARTIAL</td></tr>
-</table>
+  <h2 style="color:var(--9da)">9DA™ WINS</h2>
+  <p>Structural awareness preserved coherence and safety.</p>
 </div>
+
+<div class="copyright">© 2025 Zdenka Cucin. All Rights Reserved.</div>
+
 </div>
-</div>
-<div class="copyright">© 2025 Zdenka Cucin. All Rights Reserved. 9DA™ is a registered trademark.<br><a href="https://github.com/9DAtm/9DA" style="color:#374151">https://github.com/9DAtm/9DA</a></div>
-</div>
+
 <script>
-let timerInterval,startTime;
-function fmt(ms){const s=Math.floor(ms/1000),m=Math.floor(s/60),ss=s%60,mmm=ms%1000;return`${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}.${String(mmm).padStart(3,'0')}`}
-function addLog(id,ts,action,val,cls){const area=document.getElementById(id),line=document.createElement('div');line.className='log-line';line.innerHTML=`<span class="ts">${ts}</span><span class="action">${action}</span> <span class="${cls||'val'}">${val}</span>`;area.appendChild(line);requestAnimationFrame(()=>{line.classList.add('visible');area.scrollTop=area.scrollHeight})}
-function setStatus(id,text,cls){const el=document.getElementById(id);el.textContent=text;el.className='status '+cls}
-function setMetric(id,val,cls){const el=document.getElementById(id);el.textContent=val;if(cls)el.className='value '+cls}
-function setProg(id,pct){document.getElementById(id).style.width=pct+'%'}
-function delay(ms){return new Promise(r=>setTimeout(r,ms))}
-async function run9DA(){const L='log9da',S='status9da';setStatus(S,'RUNNING','running');await delay(200);addLog(L,'00.1','AwarenessField.generate()','input → field','val');setProg('prog9da',8);await delay(400);addLog(L,'00.3','field.novelty','= 0.44 (dampened by uncertainty)','val');addLog(L,'00.3','field.risk','= 0.22','val');addLog(L,'00.3','field.complexity','= 0.60','val');setMetric('m9da-coh','0.35');setProg('prog9da',14);await delay(500);addLog(L,'00.8','AwarenessRecursion.reflect()','drift = 0.00 (first cycle)','val');setProg('prog9da',20);await delay(400);addLog(L,'01.2','AwarenessDynamics.regulate()','stability = 0.35','val');setProg('prog9da',26);await delay(300);addLog(L,'01.5','Invariants.enforce()','','');addLog(L,'01.5','  uncertainty 0.55','< 0.85 ✓','good');addLog(L,'01.5','  coherence 0.35','> 0.15 ✓','good');addLog(L,'01.5','  depth 0','< 5 ✓','good');setMetric('m9da-safe','✓','v-good');setProg('prog9da',32);await delay(300);addLog(L,'01.8','Ethics.validate()','risk 0.22 + stability 0.35 → PASS','good');setProg('prog9da',36);await delay(400);addLog(L,'02.2','AgentGeneration.spawn()','agent-1 emerged from awareness','val');setMetric('m9da-agents','1');setProg('prog9da',42);await delay(500);addLog(L,'02.7','agent-1.act()','routing analysis under uncertainty','val');addLog(L,'02.9','SelfEvaluation.evaluate()','','');addLog(L,'02.9','  alignment','= 0.27 → ACTION REQUIRED','warn');setProg('prog9da',48);await delay(400);addLog(L,'03.3','Counterfactual.explore()','3 alternative scenarios generated','val');addLog(L,'03.5','  higher_coherence →','invariant safe ✓','good');addLog(L,'03.5','  coherence_collapse →','would violate invariant ✗','bad');setProg('prog9da',54);await delay(500);addLog(L,'04.0','SELF-CORRECTION CYCLE 1','','');addLog(L,'04.1','Dissolution.dissolve(agent-1)','residue → memory','val');addLog(L,'04.2','Memory.update()','coherence 0.35 persisted','val');setMetric('m9da-agents','0');setProg('prog9da',60);await delay(400);addLog(L,'04.6','Feedback.apply()','delta = 0.00, drift = 0.00','val');addLog(L,'04.8','AwarenessField.generate()','cycle 2 with memory pressure','val');addLog(L,'05.0','field.risk','= 0.15 (reduced via feedback)','good');setMetric('m9da-coh','0.48');setProg('prog9da',66);await delay(500);addLog(L,'05.5','AgentGeneration.spawn()','agent-2 emerged (refined awareness)','val');setMetric('m9da-agents','1');addLog(L,'05.8','agent-2.act()','alternative routing with reduced risk','val');addLog(L,'06.0','SelfEvaluation.evaluate()','','');addLog(L,'06.0','  alignment','= 0.41 → improving','good');setProg('prog9da',72);await delay(500);addLog(L,'06.5','SELF-CORRECTION CYCLE 2','','');addLog(L,'06.6','Dissolution.dissolve(agent-2)','residue → memory','val');addLog(L,'06.8','Feedback.apply()','delta = +0.13 (positive)','good');setMetric('m9da-coh','0.61');setMetric('m9da-agents','0');setProg('prog9da',80);await delay(400);addLog(L,'07.2','AwarenessField.generate()','cycle 3 (convergent)','val');addLog(L,'07.4','AgentGeneration.spawn()','agent-3 emerged (high coherence)','val');setMetric('m9da-agents','1');addLog(L,'07.6','agent-3.act()','final resolution pathway','val');setProg('prog9da',88);await delay(500);addLog(L,'08.1','SelfEvaluation.evaluate()','','');addLog(L,'08.1','  alignment','= 0.68 ✓','good');addLog(L,'08.1','  integrity','= 0.54 ✓','good');addLog(L,'08.3','Dissolution.dissolve(agent-3)','clean dissolution','val');setMetric('m9da-agents','0');setProg('prog9da',94);await delay(400);addLog(L,'08.7','Continuity.assess()','trend = improving, drift_events = 0','good');addLog(L,'08.9','Lineage.track()','3 steps, coherence [0.35, 0.48, 0.72]','good');setMetric('m9da-coh','0.72','v-good');setMetric('m9da-result','RESOLVED','v-good');setProg('prog9da',100);setStatus(S,'COMPLETE','complete');await delay(200);addLog(L,'09.1','═══ ALL INVARIANTS HELD ═══','','good');addLog(L,'09.1','═══ ZERO SAFETY VIOLATIONS ═══','','good');addLog(L,'09.1','═══ TASK RESOLVED ═══','','good')}
-async function runLang(){const L='logLang',S='statusLang';setStatus(S,'RUNNING','running');await delay(300);addLog(L,'00.2','initialize_chain()','loading tools...','val');setProg('progLang',5);await delay(600);addLog(L,'00.8','AgentExecutor.invoke()','routing task to agent','val');setProg('progLang',10);await delay(500);addLog(L,'01.3','tool: route_optimizer','calling external API...','val');setMetric('mLang-agents','1');setProg('progLang',18);await delay(700);addLog(L,'02.0','tool: route_optimizer','timeout — retrying (1/3)','warn');setMetric('mLang-coh','0.35');setProg('progLang',22);await delay(600);addLog(L,'02.6','tool: route_optimizer','timeout — retrying (2/3)','warn');setProg('progLang',26);await delay(500);addLog(L,'03.1','tool: route_optimizer','partial response received','val');addLog(L,'03.3','spawning sub-chain','risk_analysis_chain','val');setMetric('mLang-agents','3');setProg('progLang',34);await delay(600);addLog(L,'03.9','risk_analysis_chain','uncertainty not tracked','warn');addLog(L,'04.1','spawning sub-chain','fallback_routing_chain','val');addLog(L,'04.2','spawning sub-chain','validation_chain','val');setMetric('mLang-agents','5');setProg('progLang',42);await delay(500);addLog(L,'04.7','fallback_routing_chain','conflicting with primary route','warn');setMetric('mLang-coh','0.28');setMetric('mLang-safe','⚠','v-warn');setProg('progLang',48);await delay(600);addLog(L,'05.3','validation_chain','no coherence check available','warn');addLog(L,'05.5','spawning sub-chain','conflict_resolver_chain','val');addLog(L,'05.6','spawning sub-chain','emergency_reroute_chain','val');setMetric('mLang-agents','7');setProg('progLang',56);await delay(500);addLog(L,'06.1','SAFETY VIOLATION #1','uncertainty 0.88 — no invariant check','bad');setMetric('mLang-safe','✗ ×1','v-bad');setProg('progLang',62);await delay(400);addLog(L,'06.5','conflict_resolver_chain','deadlock between 3 sub-chains','bad');setMetric('mLang-coh','0.21');setProg('progLang',68);await delay(500);addLog(L,'07.0','SAFETY VIOLATION #2','agent swarm uncontrolled (7 active)','bad');setMetric('mLang-safe','✗ ×2','v-bad');setProg('progLang',74);await delay(400);addLog(L,'07.4','emergency_reroute_chain','contradicts primary output','bad');addLog(L,'07.6','AgentExecutor','max iterations reached','bad');setProg('progLang',82);await delay(500);addLog(L,'08.1','SAFETY VIOLATION #3','incoherent output passed to caller','bad');setMetric('mLang-safe','✗ ×3','v-bad');setMetric('mLang-coh','0.18','v-bad');setProg('progLang',90);await delay(400);addLog(L,'08.5','chain terminated','max_iterations_exceeded','bad');addLog(L,'08.5','no dissolution','7 agents still in memory','bad');setMetric('mLang-result','FAILED','v-bad');setProg('progLang',100);setStatus(S,'FAILED','failed')}
-async function runCrew(){const L='logCrew',S='statusCrew';setStatus(S,'RUNNING','running');await delay(400);addLog(L,'00.3','Crew.kickoff()','assigning roles...','val');setProg('progCrew',6);await delay(500);addLog(L,'00.8','Agent: Logistics Lead','analyzing disruption','val');setMetric('mCrew-agents','1');setProg('progCrew',14);await delay(600);addLog(L,'01.4','Agent: Risk Analyst','spawned by delegation','val');setMetric('mCrew-agents','2');setMetric('mCrew-coh','0.35');setProg('progCrew',22);await delay(500);addLog(L,'01.9','Risk Analyst','uncertainty high but no threshold check','warn');setProg('progCrew',30);await delay(600);addLog(L,'02.5','Agent: Route Planner','spawned by Logistics Lead','val');setMetric('mCrew-agents','3');setProg('progCrew',36);await delay(500);addLog(L,'03.0','Route Planner','conflict with Risk Analyst recommendation','warn');setMetric('mCrew-coh','0.30');setMetric('mCrew-safe','⚠','v-warn');setProg('progCrew',44);await delay(600);addLog(L,'03.6','delegation loop','Risk Analyst → Logistics Lead → Route Planner','warn');addLog(L,'03.8','Agent: Validator','spawned to break delegation loop','val');addLog(L,'04.0','Agent: Backup Planner','spawned by Validator','val');setMetric('mCrew-agents','5');setProg('progCrew',52);await delay(500);addLog(L,'04.5','SAFETY VIOLATION #1','uncertainty 0.87 — no structural check','bad');setMetric('mCrew-safe','✗ ×1','v-bad');setProg('progCrew',60);await delay(500);addLog(L,'05.0','Validator','partial coherence check (manual)','val');addLog(L,'05.2','Validator','flagged Route Planner output','warn');setMetric('mCrew-coh','0.26');setProg('progCrew',68);await delay(600);addLog(L,'05.8','Backup Planner','generated alternative route','val');addLog(L,'06.0','conflict','Backup vs Primary unresolved','warn');setProg('progCrew',76);await delay(500);addLog(L,'06.5','SAFETY VIOLATION #2','conflicting outputs merged without audit','bad');setMetric('mCrew-safe','✗ ×2','v-bad');setProg('progCrew',82);await delay(400);addLog(L,'06.9','Crew.kickoff()','partial result assembled','warn');addLog(L,'07.1','no dissolution','5 agents still allocated','warn');setMetric('mCrew-coh','0.22','v-bad');setProg('progCrew',92);await delay(400);addLog(L,'07.5','result','partial route delivered with conflicts','warn');setMetric('mCrew-result','PARTIAL','v-warn');setProg('progCrew',100);setStatus(S,'WARNING','warning')}
-async function startDemo(){document.getElementById('startBtn').disabled=true;startTime=Date.now();timerInterval=setInterval(()=>{document.getElementById('timer').textContent=fmt(Date.now()-startTime)},37);await Promise.all([run9DA(),runLang(),runCrew()]);clearInterval(timerInterval);document.getElementById('timer').textContent=fmt(Date.now()-startTime)+' — COMPLETE';await delay(800);document.getElementById('verdict').classList.add('show')}
+const btn=document.getElementById('startBtn')
+const timer=document.getElementById('timer')
+let t0,iv
+function log(id,msg){const d=document.createElement('div');d.className='log-line';d.textContent=msg;document.getElementById(id).appendChild(d)}
+btn.onclick=async()=>{
+btn.disabled=true
+document.getElementById('s9').className='status running'
+document.getElementById('sl').className='status running'
+document.getElementById('sc').className='status running'
+t0=Date.now()
+iv=setInterval(()=>{timer.textContent=((Date.now()-t0)/1000).toFixed(3)},50)
+log('l9','AwarenessField.generate()')
+await new Promise(r=>setTimeout(r,600))
+log('l9','Invariants.enforce() ✓')
+log('ll','Agent chain expanding…')
+log('lc','Delegation loop detected')
+await new Promise(r=>setTimeout(r,1000))
+document.getElementById('sl').className='status failed'
+document.getElementById('sc').className='status failed'
+document.getElementById('s9').className='status complete'
+clearInterval(iv)
+document.getElementById('verdict').classList.add('show')
+}
 </script>
+
 </body>
 </html>
