@@ -1,4 +1,4 @@
-# 9DA™ — Governed Autonomous Agent Architecture
+# 9DA™  Governed Autonomous Agent Architecture
 
 **A Research-Grade Framework for Auditable, Self-Bounded AI Systems**
 
