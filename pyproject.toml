@@ -1,0 +1,15 @@
+[project]
+name = "pure-9da-operational"
+version = "1.0.0"
+description = "Pure 9DA™ awareness-native autonomous agent architecture"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["core*", "examples*"]
