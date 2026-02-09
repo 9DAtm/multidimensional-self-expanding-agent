@@ -174,4 +174,4 @@ python -m examples.awareness_continuum_example
 This repository is provided for evaluation and testing purposes only.
 See [LICENSE](LICENSE) for full terms.
 
-For licensing inquiries: [https://github.com/9DAtm/9DA](https://github.com/9DAtm/9DA)
+For licensing inquiries: [https://github.com/9DAtm](https://github.com/9DAtm)
