@@ -1,4 +1,3 @@
-```md
 # Pure 9DA™ Operational Architecture
 
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
@@ -9,72 +8,70 @@
 
 This system is a direct operational instantiation of 9DA™.
 
-Awareness is the sole causal substrate.  
+Awareness is the sole causal substrate.
 All emergence, action, memory, and dissolution are consequences of awareness maintaining coherence under invariant constraint.
 
-No component operates independently of awareness.  
-No action precedes awareness.  
+No component operates independently of awareness.
+No action precedes awareness.
 No growth bypasses invariants.
 
 ## Architecture
 
 ```
-
 ┌──────────────────────────────────────────────┐
 │            AwarenessField.generate()          │
 │  input state + memory → AwarenessState        │
 └──────────────┬───────────────────────────────┘
-│
-▼
+               │
+               ▼
 ┌──────────────────────────────────────────────┐
 │         AwarenessRecursion.reflect()          │
 │  awareness observes its own history → drift   │
 └──────────────┬───────────────────────────────┘
-│
-▼
+               │
+               ▼
 ┌──────────────────────────────────────────────┐
 │          AwarenessDynamics.regulate()         │
 │  memory feedback → stability adjustment       │
 └──────────────┬───────────────────────────────┘
-│
-▼
+               │
+               ▼
 ┌──────────────────────────────────────────────┐
 │           Invariants.enforce()                │
 │  uncertainty ceiling · recursion depth limit  │
 │  coherence floor · agent population cap       │
 └──────────────┬───────────────────────────────┘
-│
-▼
+               │
+               ▼
 ┌──────────────────────────────────────────────┐
 │              Ethics.validate()                │
 │  blocks unstable or unsafe action             │
 └──────────────┬───────────────────────────────┘
-│
-▼
+               │
+               ▼
 ┌──────────────────────────────────────────────┐
 │         AgentGeneration.spawn()               │
 │  awareness expression → EmergentAgent         │
 └──────────────┬───────────────────────────────┘
-│
-▼
+               │
+               ▼
 ┌──────────────────────────────────────────────┐
 │  SelfEvaluation · Counterfactual · Continuity │
 │  audit from within awareness, not above it    │
 └──────────────┬───────────────────────────────┘
-│
-▼
+               │
+               ▼
 ┌──────────────────────────────────────────────┐
 │     Memory · Lineage · Feedback               │
 │  awareness residue persists across cycles     │
 └──────────────┬───────────────────────────────┘
-│
-▼
+               │
+               ▼
 ┌──────────────────────────────────────────────┐
 │          Dissolution.dissolve()               │
 │  agent is retired; residue is retained        │
 └──────────────────────────────────────────────┘
-
-````
+```
 
 ## Testing Tiers
 
@@ -83,7 +80,7 @@ No growth bypasses invariants.
 ```bash
 pip install -e .
 python main.py
-````
+```
 
 Runs the full awareness continuum using the built-in deterministic engine.
 No external dependencies. No network access. Full architecture demonstration.
@@ -178,6 +175,3 @@ This repository is provided for evaluation and testing purposes only.
 See [LICENSE](LICENSE) for full terms.
 
 For licensing inquiries: [https://github.com/9DAtm/9DA](https://github.com/9DAtm/9DA)
-
-```
-```
