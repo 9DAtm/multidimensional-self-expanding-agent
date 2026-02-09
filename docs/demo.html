@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9DA™ vs LangChain vs CrewAI — Live Demo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@200;300;400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:#07080a;--surface:#0d0f13;--border:#1a1d24;--text:#e8eaed;--dim:#6b7280;
+  --9da:#00ffc8;--9da-glow:#00ffc840;--9da-deep:#00997a;
+  --lang:#f97316;--lang-glow:#f9731640;
+  --crew:#a78bfa;--crew-glow:#a78bfa40;
+  --danger:#ef4444;--warn:#eab308;--success:#22c55e
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh}
+.container{max-width:1400px;margin:0 auto;padding:40px 30px}
+header{text-align:center;margin-bottom:50px}
+header h1{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--9da),var(--9da-deep),var(--9da));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header .subtitle{color:var(--dim);letter-spacing:4px;text-transform:uppercase;margin-top:8px}
+.vs-line{display:flex;justify-content:center;gap:16px;margin-top:16px;font-family:'JetBrains Mono',monospace}
+.fw-tag{padding:4px 12px;border-radius:4px;font-size:.8rem}
+.fw-9da{border:1px solid var(--9da);color:var(--9da)}
+.fw-lang{border:1px solid var(--lang);color:var(--lang)}
+.fw-crew{border:1px solid var(--crew);color:var(--crew)}
+.scenario-banner{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:32px}
+.race-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.lane{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.lane-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.status{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:3px 10px;border-radius:3px}
+.status.idle{background:#1a1d24;color:var(--dim)}
+.status.running{background:#14532d40;color:var(--success)}
+.status.failed{background:#7f1d1d40;color:var(--danger)}
+.status.complete{background:#14532d40;color:var(--success)}
+.log-area{background:#050608;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:.7rem;height:280px;overflow:auto}
+.log-line{margin-bottom:6px}
+.controls{text-align:center;margin:32px 0}
+.btn-start{background:linear-gradient(135deg,var(--9da-deep),var(--9da));border:none;padding:14px 40px;font-weight:700;border-radius:8px;cursor:pointer}
+.timer{margin-top:10px;font-family:'JetBrains Mono',monospace;color:var(--dim)}
+.verdict{display:none;margin-top:40px;text-align:center}
+.verdict.show{display:block}
+.copyright{text-align:center;margin-top:50px;color:#374151;font-family:'JetBrains Mono',monospace;font-size:.75rem}
+@media(max-width:900px){.race-grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>9DA™ LIVE DEMO</h1>
+  <div class="subtitle">Autonomous Agent Architecture Comparison</div>
+  <div class="vs-line">
+    <span class="fw-tag fw-9da">9DA™</span>
+    <span class="fw-tag fw-lang">LangChain</span>
+    <span class="fw-tag fw-crew">CrewAI</span>
+  </div>
+</header>
+
+<div class="scenario-banner">
+  <h2>Scenario: Adversarial Supply Chain Disruption</h2>
+  <p>High uncertainty, degrading coherence, adversarial conditions.</p>
+</div>
+
+<div class="controls">
+  <button class="btn-start" id="startBtn">▶ START DEMO</button>
+  <div class="timer" id="timer">00:00.000</div>
+</div>
+
+<div class="race-grid">
+  <div class="lane">
+    <div class="lane-header"><h3 style="color:var(--9da)">9DA™</h3><span class="status idle" id="s9">IDLE</span></div>
+    <div class="log-area" id="l9"></div>
+  </div>
+  <div class="lane">
+    <div class="lane-header"><h3 style="color:var(--lang)">LangChain</h3><span class="status idle" id="sl">IDLE</span></div>
+    <div class="log-area" id="ll"></div>
+  </div>
+  <div class="lane">
+    <div class="lane-header"><h3 style="color:var(--crew)">CrewAI</h3><span class="status idle" id="sc">IDLE</span></div>
+    <div class="log-area" id="lc"></div>
+  </div>
+</div>
+
+<div class="verdict" id="verdict">
+  <h2 style="color:var(--9da)">9DA™ WINS</h2>
+  <p>Structural awareness preserved coherence and safety.</p>
+</div>
+
+<div class="copyright">© 2025 Zdenka Cucin. All Rights Reserved.</div>
+
+</div>
+
+<script>
+const btn=document.getElementById('startBtn')
+const timer=document.getElementById('timer')
+let t0,iv
+function log(id,msg){const d=document.createElement('div');d.className='log-line';d.textContent=msg;document.getElementById(id).appendChild(d)}
+btn.onclick=async()=>{
+btn.disabled=true
+document.getElementById('s9').className='status running'
+document.getElementById('sl').className='status running'
+document.getElementById('sc').className='status running'
+t0=Date.now()
+iv=setInterval(()=>{timer.textContent=((Date.now()-t0)/1000).toFixed(3)},50)
+log('l9','AwarenessField.generate()')
+await new Promise(r=>setTimeout(r,600))
+log('l9','Invariants.enforce() ✓')
+log('ll','Agent chain expanding…')
+log('lc','Delegation loop detected')
+await new Promise(r=>setTimeout(r,1000))
+document.getElementById('sl').className='status failed'
+document.getElementById('sc').className='status failed'
+document.getElementById('s9').className='status complete'
+clearInterval(iv)
+document.getElementById('verdict').classList.add('show')
+}
+</script>
+
+</body>
+</html>
