@@ -16,6 +16,7 @@
 
 
 Three interactive demonstrations of the Nine-Dimensional Awareness (9DA) governed autonomy architecture.
+
 These demos showcase different aspects of the 9DA framework:
 
 1. **Multi-Agent Emergence** - Real-time visualization of agent spawning, interaction, and dissolution
