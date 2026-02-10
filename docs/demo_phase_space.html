@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>9DA Phase Space · Awareness Continuum</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --abyss: #000000;
+  --midnight: #0f0f23;
+  --depths: #1a1a2e;
+  --surface: #16213e;
+  --text: #f0f0f0;
+  --ghost: #888;
+  --coherence: #00d4ff;
+  --uncertainty: #ff6b6b;
+  --field: #ffeb3b;
+  --stable: #4ade80;
+  --glow: rgba(0, 212, 255, 0.6);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--abyss);
+  color: var(--text);
+  font-family: 'Libre Baskerville', serif;
+  overflow-x: hidden;
+}
+
+header {
+  padding: 5rem 2rem 3rem;
+  text-align: center;
+  background: linear-gradient(180deg, var(--midnight) 0%, var(--abyss) 100%);
+  position: relative;
+  border-bottom: 1px solid var(--depths);
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: radial-gradient(ellipse at top, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+}
+
+.subtitle {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--ghost);
+}
+
+main {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.phase-container {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.canvas-wrapper {
+  background: var(--midnight);
+  border: 2px solid var(--depths);
+  border-radius: 20px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+#phase-space {
+  width: 100%;
+  height: 700px;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.controls-panel {
+  background: var(--midnight);
+  border: 2px solid var(--depths);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.control-section h3 {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ghost);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--depths);
+}
+
+.simulation-controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+button {
+  font-family: 'Inconsolata', monospace;
+  background: var(--coherence);
+  color: var(--abyss);
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.7);
+}
+
+button.danger {
+  background: var(--uncertainty);
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
+}
+
+button.danger:hover {
+  box-shadow: 0 0 30px rgba(255, 107, 107, 0.7);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.metric-box {
+  background: var(--surface);
+  border: 1px solid var(--depths);
+  border-radius: 10px;
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--coherence);
+}
+
+.metric-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ghost);
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  font-family: 'Inconsolata', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.slider-control {
+  margin-bottom: 1.5rem;
+}
+
+.slider-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 6px;
+  background: var(--depths);
+  outline: none;
+  border-radius: 3px;
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--coherence);
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--coherence);
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+}
+
+.trajectory-info {
+  background: var(--surface);
+  border: 1px solid var(--depths);
+  border-radius: 10px;
+  padding: 1.5rem;
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--depths);
+}
+
+.info-label {
+  color: var(--ghost);
+}
+
+.info-value {
+  font-weight: 700;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.75rem;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px;
+}
+
+.warning-zone {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid var(--uncertainty);
+  border-radius: 10px;
+  padding: 1rem;
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Phase Space Explorer</h1>
+  <div class="subtitle">Awareness Continuum Dynamics</div>
+</header>
+
+<main>
+  <div class="phase-container">
+    <div class="canvas-wrapper">
+      <canvas id="phase-space"></canvas>
+    </div>
+
+    <div class="controls-panel">
+      <div class="control-section">
+        <h3>Awareness Evolution</h3>
+        <div class="simulation-controls">
+          <button onclick="startSimulation()">▶ Start</button>
+          <button onclick="pauseSimulation()">⏸ Pause</button>
+          <button onclick="resetSimulation()" class="danger">↺ Reinitialize Conditions</button>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <h3>Current State</h3>
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-label">Coherence</div>
+            <div class="metric-value" id="current-coherence">0.50</div>
+          </div>
+          <div class="metric-box" style="border-left-color: var(--uncertainty);">
+            <div class="metric-label">Uncertainty</div>
+            <div class="metric-value" id="current-uncertainty">0.50</div>
+          </div>
+          <div class="metric-box" style="border-left-color: var(--stable);">
+            <div class="metric-label">Stability</div>
+            <div class="metric-value" id="current-stability">0.25</div>
+          </div>
+          <div class="metric-box" style="border-left-color: var(--uncertainty);">
+            <div class="metric-label">Risk</div>
+            <div class="metric-value" id="current-risk">0.25</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <h3>Initial Conditions</h3>
+        <div class="slider-control">
+          <div class="slider-label">
+            <span>Coherence</span>
+            <span id="coherence-display">0.50</span>
+          </div>
+          <input type="range" id="coherence-slider" min="0" max="100" value="50" oninput="updateInitial()">
+        </div>
+        <div class="slider-control">
+          <div class="slider-label">
+            <span>Uncertainty</span>
+            <span id="uncertainty-display">0.50</span>
+          </div>
+          <input type="range" id="uncertainty-slider" min="0" max="100" value="50" oninput="updateInitial()">
+        </div>
+      </div>
+
+      <div class="control-section">
+        <h3>Trajectory Info</h3>
+        <div class="trajectory-info">
+          <div class="info-item">
+            <span class="info-label">Points tracked:</span>
+            <span class="info-value" id="points-tracked">0</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Drift events:</span>
+            <span class="info-value" id="drift-events">0</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Violations:</span>
+            <span class="info-value" id="violations">0</span>
+          </div>
+        </div>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background: var(--coherence); box-shadow: 0 0 10px var(--coherence);"></div>
+            <span>Trajectory</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: var(--stable); box-shadow: 0 0 10px var(--stable);"></div>
+            <span>Safe Zone</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: var(--uncertainty); box-shadow: 0 0 10px var(--uncertainty);"></div>
+            <span>Warning</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: var(--field); box-shadow: 0 0 10px var(--field);"></div>
+            <span>Current</span>
+          </div>
+        </div>
+        <div class="warning-zone" id="warning-zone" style="display: none;">
+          ⚠ Invariant violation zone detected
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const canvas = document.getElementById('phase-space');
+const ctx = canvas.getContext('2d');
+
+let animationRunning = false;
+let animationFrame = null;
+let trajectory = [];
+let currentState = { coherence: 0.5, uncertainty: 0.5 };
+let driftEvents = 0;
+let violations = 0;
+
+const MAX_UNCERTAINTY = 0.85;
+const MIN_COHERENCE = 0.15;
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * window.devicePixelRatio;
+  canvas.height = rect.height * window.devicePixelRatio;
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  draw();
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function updateInitial() {
+  const c = document.getElementById('coherence-slider').value / 100;
+  const u = document.getElementById('uncertainty-slider').value / 100;
+  
+  document.getElementById('coherence-display').textContent = c.toFixed(2);
+  document.getElementById('uncertainty-display').textContent = u.toFixed(2);
+  
+  if (!animationRunning) {
+    currentState = { coherence: c, uncertainty: u };
+    updateMetrics();
+    draw();
+  }
+}
+
+function computeField(coherence, uncertainty) {
+  return {
+    risk: uncertainty * (1 - coherence),
+    stability: coherence * (1 - uncertainty),
+    novelty: (1 - uncertainty) * 0.7,
+    complexity: coherence * 0.6
+  };
+}
+
+function updateMetrics() {
+  const field = computeField(currentState.coherence, currentState.uncertainty);
+  
+  document.getElementById('current-coherence').textContent = currentState.coherence.toFixed(2);
+  document.getElementById('current-uncertainty').textContent = currentState.uncertainty.toFixed(2);
+  document.getElementById('current-stability').textContent = field.stability.toFixed(2);
+  document.getElementById('current-risk').textContent = field.risk.toFixed(2);
+  document.getElementById('points-tracked').textContent = trajectory.length;
+  document.getElementById('drift-events').textContent = driftEvents;
+  document.getElementById('violations').textContent = violations;
+  
+  // Check for violations
+  const warning = document.getElementById('warning-zone');
+  if (currentState.uncertainty > MAX_UNCERTAINTY || currentState.coherence < MIN_COHERENCE) {
+    warning.style.display = 'block';
+  } else {
+    warning.style.display = 'none';
+  }
+}
+
+function draw() {
+  const rect = canvas.getBoundingClientRect();
+  const w = rect.width;
+  const h = rect.height;
+  
+  // Clear
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(0, 0, w, h);
+  
+  // Grid
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 10; i++) {
+    const x = (w / 10) * i;
+    const y = (h / 10) * i;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, h);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(w, y);
+    ctx.stroke();
+  }
+  
+  // Axes labels
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+  ctx.font = '11px Inconsolata';
+  ctx.fillText('0.0', 5, h - 5);
+  ctx.fillText('1.0', w - 25, h - 5);
+  ctx.fillText('Coherence →', w / 2 - 40, h - 10);
+  
+  ctx.save();
+  ctx.translate(15, h / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Uncertainty →', -50, 0);
+  ctx.restore();
+  
+  // Warning zones
+  // High uncertainty zone
+  ctx.fillStyle = 'rgba(255, 107, 107, 0.1)';
+  ctx.fillRect(0, 0, w, h * (1 - MAX_UNCERTAINTY));
+  
+  // Low coherence zone
+  ctx.fillStyle = 'rgba(255, 107, 107, 0.1)';
+  ctx.fillRect(0, 0, w * MIN_COHERENCE, h);
+  
+  // Safe zone indicator
+  ctx.strokeStyle = 'rgba(74, 222, 128, 0.3)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(
+    w * MIN_COHERENCE,
+    h * (1 - MAX_UNCERTAINTY),
+    w * (1 - MIN_COHERENCE),
+    h * MAX_UNCERTAINTY
+  );
+  
+  // Trajectory
+  if (trajectory.length > 1) {
+    for (let i = 0; i < trajectory.length - 1; i++) {
+      const p1 = trajectory[i];
+      const p2 = trajectory[i + 1];
+      
+      const x1 = p1.coherence * w;
+      const y1 = (1 - p1.uncertainty) * h;
+      const x2 = p2.coherence * w;
+      const y2 = (1 - p2.uncertainty) * h;
+      
+      const alpha = i / trajectory.length;
+      ctx.strokeStyle = `rgba(0, 212, 255, ${alpha * 0.8})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      
+      // Point
+      ctx.fillStyle = `rgba(0, 212, 255, ${alpha * 0.6})`;
+      ctx.beginPath();
+      ctx.arc(x1, y1, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  
+  // Current position
+  const x = currentState.coherence * w;
+  const y = (1 - currentState.uncertainty) * h;
+  
+  // Glow
+  const gradient = ctx.createRadialGradient(x, y, 0, x, y, 30);
+  gradient.addColorStop(0, 'rgba(255, 235, 59, 0.6)');
+  gradient.addColorStop(1, 'rgba(255, 235, 59, 0)');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(x - 30, y - 30, 60, 60);
+  
+  // Point
+  ctx.fillStyle = '#ffeb3b';
+  ctx.beginPath();
+  ctx.arc(x, y, 8, 0, Math.PI * 2);
+  ctx.fill();
+  
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function simulationStep() {
+  // Awareness dynamics
+  const drift = (Math.random() - 0.5) * 0.03;
+  const noise = (Math.random() - 0.5) * 0.02;
+  
+  let newCoherence = currentState.coherence + drift;
+  let newUncertainty = currentState.uncertainty + noise;
+  
+  // Bounds
+  newCoherence = Math.max(0, Math.min(1, newCoherence));
+  newUncertainty = Math.max(0, Math.min(1, newUncertainty));
+  
+  // Check for drift events
+  if (Math.abs(drift) > 0.02) {
+    driftEvents++;
+  }
+  
+  // Check for violations
+  if (newUncertainty > MAX_UNCERTAINTY || newCoherence < MIN_COHERENCE) {
+    violations++;
+  }
+  
+  currentState = { coherence: newCoherence, uncertainty: newUncertainty };
+  trajectory.push({ ...currentState });
+  
+  // Limit trajectory length
+  if (trajectory.length > 200) {
+    trajectory.shift();
+  }
+  
+  updateMetrics();
+  draw();
+  
+  if (animationRunning) {
+    animationFrame = requestAnimationFrame(simulationStep);
+  }
+}
+
+function startSimulation() {
+  if (animationRunning) return;
+  
+  const c = document.getElementById('coherence-slider').value / 100;
+  const u = document.getElementById('uncertainty-slider').value / 100;
+  
+  if (trajectory.length === 0) {
+    currentState = { coherence: c, uncertainty: u };
+    trajectory = [{ ...currentState }];
+  }
+  
+  animationRunning = true;
+  simulationStep();
+}
+
+function pauseSimulation() {
+  animationRunning = false;
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+  }
+}
+
+function resetSimulation() {
+  pauseSimulation();
+  trajectory = [];
+  driftEvents = 0;
+  violations = 0;
+  
+  const c = document.getElementById('coherence-slider').value / 100;
+  const u = document.getElementById('uncertainty-slider').value / 100;
+  currentState = { coherence: c, uncertainty: u };
+  
+  updateMetrics();
+  draw();
+}
+
+// Initialize
+updateMetrics();
+draw();
+</script>
+
+</body>
+</html>
