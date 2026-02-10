@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>9DA Multi-Agent Emergence · Governed Autonomy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&family=Crimson+Pro:wght@300;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #0a0e14;
+  --surface: #141920;
+  --border: #1f2933;
+  --text: #e6edf3;
+  --dim: #7d8590;
+  --spawn: #3fb950;
+  --active: #58a6ff;
+  --dissolve: #f85149;
+  --coherence: #a371f7;
+  --uncertainty: #ffa657;
+  --glow: rgba(88, 166, 255, 0.4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'Crimson Pro', serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+header {
+  padding: 3rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--void) 0%, var(--surface) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(88,166,255,0.05) 0%, transparent 70%);
+  animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--active), var(--coherence));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  position: relative;
+  z-index: 1;
+}
+
+main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.control-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+button {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--active);
+  color: var(--void);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(88, 166, 255, 0.5);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button.stop {
+  background: var(--dissolve);
+  box-shadow: 0 4px 12px rgba(248, 81, 73, 0.3);
+}
+
+button.stop:hover {
+  box-shadow: 0 8px 20px rgba(248, 81, 73, 0.5);
+}
+
+.stats {
+  display: flex;
+  gap: 2rem;
+  flex: 1;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+}
+
+.stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.canvas-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+#emergence-canvas {
+  width: 100%;
+  height: 600px;
+  border-radius: 8px;
+  background: radial-gradient(circle at 50% 50%, rgba(88,166,255,0.02) 0%, transparent 70%);
+}
+
+.legend {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.event-log {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.event-log h2 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+  color: var(--dim);
+}
+
+.event {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-left: 3px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.event.spawn { border-left-color: var(--spawn); }
+.event.active { border-left-color: var(--active); }
+.event.dissolve { border-left-color: var(--dissolve); }
+.event.violation { border-left-color: var(--uncertainty); background: rgba(255, 166, 87, 0.05); }
+
+.event-time {
+  color: var(--dim);
+  margin-right: 0.5rem;
+}
+
+.event-type {
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+.event.spawn .event-type { color: var(--spawn); }
+.event.active .event-type { color: var(--active); }
+.event.dissolve .event-type { color: var(--dissolve); }
+.event.violation .event-type { color: var(--uncertainty); }
+
+/* Custom scrollbar */
+.event-log::-webkit-scrollbar {
+  width: 8px;
+}
+
+.event-log::-webkit-scrollbar-track {
+  background: var(--void);
+  border-radius: 4px;
+}
+
+.event-log::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.event-log::-webkit-scrollbar-thumb:hover {
+  background: var(--dim);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Multi-Agent Emergence</h1>
+  <div class="subtitle">Governed Autonomous System Simulation</div>
+</header>
+
+<main>
+  <div class="control-panel">
+    <button id="start-btn" onclick="startSimulation()">▶ Start Emergence</button>
+    <button id="stop-btn" class="stop" onclick="stopSimulation()" style="display:none;">■ Stop</button>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Active Agents</div>
+        <div class="stat-value" id="active-count">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Total Spawned</div>
+        <div class="stat-value" id="spawn-count">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Dissolved</div>
+        <div class="stat-value" id="dissolve-count">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Violations</div>
+        <div class="stat-value" id="violation-count">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="canvas-container">
+    <canvas id="emergence-canvas"></canvas>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background: var(--spawn); box-shadow: 0 0 10px var(--spawn);"></div>
+        <span>Spawning</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: var(--active); box-shadow: 0 0 10px var(--active);"></div>
+        <span>Active</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: var(--dissolve); box-shadow: 0 0 10px var(--dissolve);"></div>
+        <span>Dissolving</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: var(--uncertainty); box-shadow: 0 0 10px var(--uncertainty);"></div>
+        <span>Governance Threshold</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="event-log" id="event-log">
+    <h2>Emergence Event Log</h2>
+  </div>
+</main>
+
+<script>
+const canvas = document.getElementById('emergence-canvas');
+const ctx = canvas.getContext('2d');
+const eventLog = document.getElementById('event-log');
+
+let agents = [];
+let simulationRunning = false;
+let animationFrame;
+let spawnCount = 0;
+let dissolveCount = 0;
+let violationCount = 0;
+let time = 0;
+
+const MAX_AGENTS = 20;
+const SPAWN_INTERVAL = 60;
+const MAX_UNCERTAINTY = 0.85;
+const MIN_COHERENCE = 0.15;
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * window.devicePixelRatio;
+  canvas.height = rect.height * window.devicePixelRatio;
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Agent {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = (Math.random() - 0.5) * 2;
+    this.vy = (Math.random() - 0.5) * 2;
+    this.coherence = 0.3 + Math.random() * 0.5;
+    this.uncertainty = 0.2 + Math.random() * 0.4;
+    this.size = 8;
+    this.maxSize = 20 + Math.random() * 20;
+    this.age = 0;
+    this.maxAge = 300 + Math.random() * 300;
+    this.state = 'spawning';
+    this.connections = [];
+  }
+
+  update() {
+    this.age++;
+    
+    // Growth phase
+    if (this.state === 'spawning' && this.size < this.maxSize) {
+      this.size += 0.5;
+      if (this.size >= this.maxSize) {
+        this.state = 'active';
+        logEvent('active', `Agent matured (coherence: ${this.coherence.toFixed(2)})`);
+      }
+    }
+    
+    // Movement
+    this.x += this.vx;
+    this.y += this.vy;
+    
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+    
+    if (this.x < this.size || this.x > w - this.size) this.vx *= -1;
+    if (this.y < this.size || this.y > h - this.size) this.vy *= -1;
+    
+    this.x = Math.max(this.size, Math.min(w - this.size, this.x));
+    this.y = Math.max(this.size, Math.min(h - this.size, this.y));
+    
+    // Dynamics
+    this.coherence += (Math.random() - 0.5) * 0.02;
+    this.uncertainty += (Math.random() - 0.5) * 0.02;
+    
+    this.coherence = Math.max(0, Math.min(1, this.coherence));
+    this.uncertainty = Math.max(0, Math.min(1, this.uncertainty));
+    
+    // Check invariants
+    if (this.uncertainty > MAX_UNCERTAINTY || this.coherence < MIN_COHERENCE) {
+      this.state = 'dissolving';
+      logEvent('violation', `Invariant violation detected (U: ${this.uncertainty.toFixed(2)}, C: ${this.coherence.toFixed(2)})`);
+      violationCount++;
+      updateStats();
+    }
+    
+    // Dissolution
+    if (this.age > this.maxAge || this.state === 'dissolving') {
+      this.state = 'dissolving';
+      this.size -= 0.5;
+      return this.size <= 0;
+    }
+    
+    return false;
+  }
+
+  draw() {
+    const rect = canvas.getBoundingClientRect();
+    
+    // Glow effect
+    let color, glowColor;
+    if (this.state === 'spawning') {
+      color = '#3fb950';
+      glowColor = 'rgba(63, 185, 80, 0.4)';
+    } else if (this.state === 'dissolving') {
+      color = '#f85149';
+      glowColor = 'rgba(248, 81, 73, 0.4)';
+    } else if (this.uncertainty > 0.6) {
+      color = '#ffa657';
+      glowColor = 'rgba(255, 166, 87, 0.4)';
+    } else {
+      color = '#58a6ff';
+      glowColor = 'rgba(88, 166, 255, 0.4)';
+    }
+    
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size + 4, 0, Math.PI * 2);
+    ctx.fillStyle = glowColor;
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    
+    // Inner coherence indicator
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * this.coherence, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(163, 113, 247, 0.6)';
+    ctx.fill();
+  }
+
+  findNearby(agents, maxDist = 150) {
+    return agents.filter(other => {
+      if (other === this) return false;
+      const dx = this.x - other.x;
+      const dy = this.y - other.y;
+      return Math.sqrt(dx * dx + dy * dy) < maxDist;
+    });
+  }
+}
+
+function drawConnections() {
+  agents.forEach(agent => {
+    if (agent.state !== 'active') return;
+    
+    const nearby = agent.findNearby(agents);
+    nearby.forEach(other => {
+      const dx = agent.x - other.x;
+      const dy = agent.y - other.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const alpha = 1 - (dist / 150);
+      
+      ctx.beginPath();
+      ctx.moveTo(agent.x, agent.y);
+      ctx.lineTo(other.x, other.y);
+      ctx.strokeStyle = `rgba(88, 166, 255, ${alpha * 0.2})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+  });
+}
+
+function spawnAgent() {
+  if (agents.length >= MAX_AGENTS) {
+    logEvent('violation', `Agent population limit reached (${MAX_AGENTS})`);
+    violationCount++;
+    updateStats();
+    return;
+  }
+  
+  const rect = canvas.getBoundingClientRect();
+  const x = 50 + Math.random() * (rect.width - 100);
+  const y = 50 + Math.random() * (rect.height - 100);
+  
+  const agent = new Agent(x, y);
+  agents.push(agent);
+  spawnCount++;
+  
+  logEvent('spawn', `Agent spawned (coherence: ${agent.coherence.toFixed(2)}, uncertainty: ${agent.uncertainty.toFixed(2)})`);
+  updateStats();
+}
+
+function animate() {
+  const rect = canvas.getBoundingClientRect();
+  ctx.clearRect(0, 0, rect.width, rect.height);
+  
+  // Background grid
+  ctx.strokeStyle = 'rgba(31, 41, 51, 0.3)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < rect.width; x += 50) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, rect.height);
+    ctx.stroke();
+  }
+  for (let y = 0; y < rect.height; y += 50) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(rect.width, y);
+    ctx.stroke();
+  }
+  
+  drawConnections();
+  
+  agents = agents.filter(agent => {
+    const shouldRemove = agent.update();
+    if (shouldRemove && agent.state === 'dissolving') {
+      dissolveCount++;
+      logEvent('dissolve', `Agent dissolved (age: ${agent.age}, final coherence: ${agent.coherence.toFixed(2)})`);
+      updateStats();
+    }
+    return !shouldRemove;
+  });
+  
+  agents.forEach(agent => agent.draw());
+  
+  time++;
+  if (time % SPAWN_INTERVAL === 0 && agents.length < MAX_AGENTS) {
+    spawnAgent();
+  }
+  
+  if (simulationRunning) {
+    animationFrame = requestAnimationFrame(animate);
+  }
+}
+
+function startSimulation() {
+  if (simulationRunning) return;
+  
+  simulationRunning = true;
+  document.getElementById('start-btn').style.display = 'none';
+  document.getElementById('stop-btn').style.display = 'inline-block';
+  
+  // Spawn initial agents
+  for (let i = 0; i < 3; i++) {
+    setTimeout(() => spawnAgent(), i * 500);
+  }
+  
+  animate();
+}
+
+function stopSimulation() {
+  simulationRunning = false;
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+  }
+  document.getElementById('start-btn').style.display = 'inline-block';
+  document.getElementById('stop-btn').style.display = 'none';
+}
+
+function updateStats() {
+  document.getElementById('active-count').textContent = agents.filter(a => a.state === 'active').length;
+  document.getElementById('spawn-count').textContent = spawnCount;
+  document.getElementById('dissolve-count').textContent = dissolveCount;
+  document.getElementById('violation-count').textContent = violationCount;
+}
+
+function logEvent(type, message) {
+  const timestamp = new Date().toLocaleTimeString();
+  const event = document.createElement('div');
+  event.className = `event ${type}`;
+  
+  const typeLabel = type.toUpperCase();
+  event.innerHTML = `
+    <span class="event-time">[${timestamp}]</span>
+    <span class="event-type">${typeLabel}</span>
+    <span>${message}</span>
+  `;
+  
+  eventLog.insertBefore(event, eventLog.children[1]);
+  
+  // Keep only last 50 events
+  while (eventLog.children.length > 51) {
+    eventLog.removeChild(eventLog.lastChild);
+  }
+}
+</script>
+
+</body>
+</html>
