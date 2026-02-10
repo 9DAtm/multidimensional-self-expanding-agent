@@ -11,8 +11,18 @@
 > **[▶ Watch Live Demo: 9DA™ EMERGENCE](https://9datm.github.io/multidimensional-self-expanding-agent/demo_emergence.html)**
 > 
 > **[▶ Watch Live Demo: 9DA™ PHASE SPACE ](https://9datm.github.io/multidimensional-self-expanding-agent/demo_phase_space.html)**
-> 
-> **[▶ Watch Live Demo: 9DA™ VIEWER ](https://9datm.github.io/multidimensional-self-expanding-agent/demo_viewer.html)**
+
+
+## Three interactive demonstrations of the Nine-Dimensional Awareness (9DA) governed autonomy architecture.
+These demos showcase different aspects of the 9DA framework:
+
+1. **Multi-Agent Emergence** - Real-time visualization of agent spawning, interaction, and dissolution
+2. **Counterfactual Explorer** - Interactive decision tree analysis with alternative paths
+3. **Phase Space Dynamics** - Awareness continuum trajectory visualization
+
+Docs/Each demo consists of:
+- **HTML frontend** - Interactive, browser-based visualization
+- **Python backend** - Computational engine with full governance layer
 
 
 **9DA™** is a governed autonomous agent architecture designed around a single premise:
