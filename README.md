@@ -6,7 +6,13 @@
 [![9DA™](https://img.shields.io/badge/9DA™-Registered%20Trademark-00ffc8.svg)](https://github.com/9DAtm/9DA)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 
-> **[▶ Watch Live Demo: 9DA™](https://9datm.github.io/multidimensional-self-expanding-agent/demo_viewer.html)**
+> **[▶ Watch Live Demo: 9DA™ COUNTERFACTUAL](https://9datm.github.io/multidimensional-self-expanding-agent/demo_counterfactual.html)**
+> 
+> **[▶ Watch Live Demo: 9DA™ EMERGENCE](https://9datm.github.io/multidimensional-self-expanding-agent/demo_emergence.html)**
+> 
+> **[▶ Watch Live Demo: 9DA™ PHASE SPACE ](https://9datm.github.io/multidimensional-self-expanding-agent/demo_phase_space.html)**
+> 
+> **[▶ Watch Live Demo: 9DA™ VIEWER ](https://9datm.github.io/multidimensional-self-expanding-agent/demo_viewer.html)**
 
 
 **9DA™** is a governed autonomous agent architecture designed around a single premise:
@@ -158,15 +164,108 @@ As autonomous systems become more capable, the limiting factor is no longer inte
 
 This repository exists to make those principles concrete.
 
-License and Attribution
+## Testing Tiers
 
-The 9DA™ Framework, including its architecture, naming, conceptual structure, and applied domains, is proprietary intellectual property of Zdenka Cucin, Originator and Lead Developer.
+### Tier 1 — Free (no account, no API key)
 
-This repository is provided for research, evaluation, and demonstration purposes only.
+```bash
+pip install -e .
+python main.py
+```
+
+Runs the full awareness continuum using the built-in deterministic engine.
+No external dependencies. No network access. Full architecture demonstration.
+
+### Tier 2 — Free (local LLM, no API key)
+
+Install [Ollama](https://ollama.com), then:
+
+```bash
+ollama pull llama3
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```env
+LLM_PROVIDER=ollama
+LLM_MODEL=llama3
+```
+
+Run:
+
+```bash
+python main.py
+```
+
+Agents now think using a real LLM running on your machine. Cost: $0.
+
+### Tier 3 — Paid (bring your own API key)
+
+Create an account at [Anthropic](https://console.anthropic.com) or [OpenAI](https://platform.openai.com).
+
+Edit `.env`:
+
+```env
+LLM_PROVIDER=anthropic
+LLM_API_KEY=sk-ant-...
+LLM_MODEL=claude-sonnet-4-20250514
+```
+
+Or:
+
+```env
+LLM_PROVIDER=openai
+LLM_API_KEY=sk-...
+LLM_MODEL=gpt-4o
+```
+
+Cost per awareness cycle:
+
+| Provider  | Model         | Cost per cycle |
+| --------- | ------------- | -------------- |
+| Ollama    | llama3        | $0.00          |
+| Anthropic | claude-sonnet | $0.01–$0.03    |
+| Anthropic | claude-opus   | $0.09–$0.24    |
+| OpenAI    | gpt-4o-mini   | $0.001–$0.003  |
+| OpenAI    | gpt-4o        | $0.015–$0.06   |
+
+You pay the LLM provider directly.
+
+## Requirements
+
+* Python 3.11+
+* (Optional) Ollama for local LLM
+* (Optional) Anthropic or OpenAI API key for cloud LLM
+
+## Install
+
+```bash
+pip install -e .
+```
+
+## Run
+
+```bash
+python main.py
+```
+
+## Examples
+
+```bash
+python -m examples.awareness_continuum_example
+```
+
+## Legal
+
+9DA™ is a registered trademark. The entirety of the 9DA™ Framework, including naming, structure, conceptual architecture, applied domains, and visual identity, is proprietary intellectual property of Zdenka Cucin, Originator and Lead Developer.
 
 This repository is provided for evaluation and testing purposes only.
 See [LICENSE](LICENSE) for full terms.
 
 For licensing inquiries: [https://github.com/9DAtm](https://github.com/9DAtm)
+
+© 2025 Zdenka Cucin. All Rights Reserved.
+
 
 © 2025 Zdenka Cucin. All Rights Reserved.
