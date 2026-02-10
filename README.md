@@ -1,6 +1,7 @@
 # 9DA™  Governed Autonomous Agent Architecture
 
 **A Research-Grade Framework for Auditable, Self-Bounded AI Systems**
+“If you’re using this architecture in research or tooling, attribution is appreciated.” Zdenka
 
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 [![9DA™](https://img.shields.io/badge/9DA™-Registered%20Trademark-00ffc8.svg)](https://github.com/9DAtm/9DA)
@@ -13,7 +14,7 @@
 > **[▶ Watch Live Demo: 9DA™ PHASE SPACE ](https://9datm.github.io/multidimensional-self-expanding-agent/demo_phase_space.html)**
 
 
-## Three interactive demonstrations of the Nine-Dimensional Awareness (9DA) governed autonomy architecture.
+# Three interactive demonstrations of the Nine-Dimensional Awareness (9DA) governed autonomy architecture.
 These demos showcase different aspects of the 9DA framework:
 
 1. **Multi-Agent Emergence** - Real-time visualization of agent spawning, interaction, and dissolution
