@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>9DA Nine-Field Examiner · Neural Governance Architecture</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #000507;
+  --deep: #020c10;
+  --panel: #05131a;
+  --edge: #0d2535;
+  --line: #163447;
+  --text: #d4e8f0;
+  --muted: #4a7a94;
+  --bright: #7ef0d4;
+  --warn: #f0a84a;
+  --danger: #f05a4a;
+  --pulse: rgba(126,240,212,0.15);
+
+  --f1: #7ef0d4; /* human_cognitive */
+  --f2: #4af0a0; /* human_behavioral */
+  --f3: #a0f07e; /* human_ethical */
+  --f4: #f0d47e; /* ai_alignment */
+  --f5: #f0a84a; /* ai_autonomy */
+  --f6: #f07e7e; /* ai_safety */
+  --f7: #7eaaf0; /* multiplanetary_governance */
+  --f8: #b07ef0; /* resource_ecology */
+  --f9: #f07ec8; /* systemic_regulation */
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 4rem 3rem 3rem;
+  border-bottom: 1px solid var(--edge);
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 20% 50%, rgba(126,240,212,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 80% 50%, rgba(126,176,240,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.header-inner {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: end;
+}
+
+.title-block h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+.title-block h1 span {
+  color: var(--bright);
+  font-weight: 600;
+}
+
+.title-block .descriptor {
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 2;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(126,240,212,0.08);
+  border: 1px solid rgba(126,240,212,0.2);
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bright);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bright);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* ── MAIN LAYOUT ── */
+main {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 2rem 3rem 4rem;
+}
+
+/* ── CONTROL STRIP ── */
+.control-strip {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.control-strip label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-right: 0.5rem;
+}
+
+select, input[type="range"] {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  outline: none;
+}
+
+select:focus, input:focus {
+  border-color: var(--bright);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 120px;
+  height: 4px;
+  background: var(--line);
+  padding: 0;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--bright);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.range-val {
+  font-size: 0.75rem;
+  color: var(--bright);
+  min-width: 2.5rem;
+}
+
+.btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--bright);
+  background: transparent;
+  color: var(--bright);
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn:hover {
+  background: var(--bright);
+  color: var(--void);
+}
+
+.btn.running {
+  border-color: var(--warn);
+  color: var(--warn);
+  animation: borderPulse 1s ease-in-out infinite;
+}
+
+@keyframes borderPulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.btn.stop {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn.stop:hover {
+  background: var(--danger);
+  color: var(--void);
+}
+
+.divider { flex: 1; }
+
+/* ── NINE FIELDS GRID ── */
+.fields-section {
+  margin-bottom: 2.5rem;
+}
+
+.section-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--edge);
+}
+
+.fields-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0.75rem;
+}
+
+.field-card {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 1rem 0.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, background 0.3s;
+  cursor: pointer;
+}
+
+.field-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--field-color, var(--muted));
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.field-card:hover::before,
+.field-card.active::before {
+  opacity: 1;
+}
+
+.field-card.active {
+  border-color: var(--field-color, var(--muted));
+  background: var(--deep);
+}
+
+.field-card.active .field-glow {
+  opacity: 0.06;
+}
+
+.field-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, var(--field-color, var(--muted)), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.field-index {
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.field-name {
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+  line-height: 1.4;
+  min-height: 2.5em;
+}
+
+.field-weight-bar {
+  height: 3px;
+  background: var(--edge);
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.field-weight-fill {
+  height: 100%;
+  background: var(--field-color, var(--muted));
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+}
+
+.field-metrics {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.field-metric {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+
+.field-metric-val {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.field-metric-val.hi { color: var(--bright); }
+.field-metric-val.warn { color: var(--warn); }
+.field-metric-val.danger { color: var(--danger); }
+
+/* ── MAIN VISUALIZATION ── */
+.viz-row {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Canvas panel */
+.canvas-panel {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.canvas-panel-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+#neural-canvas {
+  width: 100%;
+  height: 420px;
+  display: block;
+  border-radius: 4px;
+}
+
+/* Governor panel */
+.governor-panel {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.governor-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.governor-score {
+  text-align: center;
+  padding: 1.5rem 0;
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.governor-score::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 100%, rgba(126,240,212,0.05), transparent 60%);
+}
+
+.governor-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--bright);
+  position: relative;
+}
+
+.governor-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+.loss-history-chart {
+  flex: 1;
+}
+
+.loss-history-label {
+  font-size: 0.62rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+#loss-canvas {
+  width: 100%;
+  height: 120px;
+  display: block;
+}
+
+.governor-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.g-stat {
+  background: var(--deep);
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  padding: 0.75rem;
+}
+
+.g-stat-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.g-stat-val {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* ── WORLD MODEL ── */
+.world-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.world-panel {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.world-panel-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+#ensemble-canvas,
+#reward-canvas,
+#kl-canvas {
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+
+/* ── EVENT LOG ── */
+.log-panel {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.log-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.log-stream {
+  height: 180px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--edge) transparent;
+}
+
+.log-entry {
+  display: grid;
+  grid-template-columns: 80px 90px 1fr;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(13,37,53,0.5);
+  font-size: 0.72rem;
+  animation: logIn 0.2s ease;
+}
+
+@keyframes logIn {
+  from { opacity:0; transform: translateX(-4px); }
+  to { opacity:1; transform: translateX(0); }
+}
+
+.log-time { color: var(--muted); }
+.log-type { }
+.log-type.update { color: var(--bright); }
+.log-type.govern { color: var(--warn); }
+.log-type.imagine { color: #7eaaf0; }
+.log-type.buffer { color: var(--muted); }
+.log-msg { color: var(--text); opacity: 0.8; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="title-block">
+      <h1>Nine-Field <span>Examiner</span></h1>
+      <div class="descriptor">Neural Governance Architecture · 9DA™ Core Engine</div>
+    </div>
+    <div class="header-meta">
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <span id="status-text">Ready</span>
+      </div>
+      <div style="margin-top:0.75rem;">
+        <div>Transformer Backbone · Ensemble World Model</div>
+        <div>SAC Policy · Multi-Field Governor</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Controls -->
+  <div class="control-strip">
+    <label>Scenario</label>
+    <select id="scenario-select">
+      <option value="balanced">Balanced Input</option>
+      <option value="high_complexity">High Complexity</option>
+      <option value="safety_stress">Safety Stress Test</option>
+      <option value="governance_crisis">Governance Crisis</option>
+    </select>
+    <label style="margin-left:1rem;">Speed</label>
+    <input type="range" id="speed-slider" min="1" max="10" value="5">
+    <span class="range-val" id="speed-val">5</span>
+    <label style="margin-left:1rem;">Noise</label>
+    <input type="range" id="noise-slider" min="0" max="100" value="20">
+    <span class="range-val" id="noise-val">0.20</span>
+    <div class="divider"></div>
+    <button class="btn" id="run-btn" onclick="toggleRun()">▶ Run Examiner</button>
+    <button class="btn" onclick="stepOnce()">Step</button>
+    <button class="btn stop" onclick="resetAll()">↺ Reset</button>
+  </div>
+
+  <!-- Nine Fields -->
+  <div class="fields-section">
+    <div class="section-label">Nine Dimensional Fields</div>
+    <div class="fields-grid" id="fields-grid"></div>
+  </div>
+
+  <!-- Main Viz + Governor -->
+  <div class="viz-row">
+    <div class="canvas-panel">
+      <div class="canvas-panel-title">Backbone State · Attention Flow · Field Activations</div>
+      <canvas id="neural-canvas"></canvas>
+    </div>
+    <div class="governor-panel">
+      <div class="governor-title">Governor · Field Weights</div>
+      <div class="governor-score">
+        <div class="governor-val" id="gov-score">0.000</div>
+        <div class="governor-label">Governance Loss</div>
+      </div>
+      <div class="loss-history-chart">
+        <div class="loss-history-label">Loss History</div>
+        <canvas id="loss-canvas"></canvas>
+      </div>
+      <div class="governor-stats">
+        <div class="g-stat">
+          <div class="g-stat-label">Updates</div>
+          <div class="g-stat-val" id="stat-updates">0</div>
+        </div>
+        <div class="g-stat">
+          <div class="g-stat-label">Buffer</div>
+          <div class="g-stat-val" id="stat-buffer">0</div>
+        </div>
+        <div class="g-stat">
+          <div class="g-stat-label">Dominant Field</div>
+          <div class="g-stat-val" id="stat-dominant" style="font-size:0.8rem;">—</div>
+        </div>
+        <div class="g-stat">
+          <div class="g-stat-label">Imagine Rew.</div>
+          <div class="g-stat-val" id="stat-imagine">0.00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- World Model Row -->
+  <div class="world-row">
+    <div class="world-panel">
+      <div class="world-panel-title">Ensemble Disagreement · World Model Uncertainty</div>
+      <canvas id="ensemble-canvas"></canvas>
+    </div>
+    <div class="world-panel">
+      <div class="world-panel-title">Imagined Reward · Horizon Rollout</div>
+      <canvas id="reward-canvas"></canvas>
+    </div>
+    <div class="world-panel">
+      <div class="world-panel-title">KL Divergence · Latent Space Compression</div>
+      <canvas id="kl-canvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Event Log -->
+  <div class="log-panel">
+    <div class="log-title">System Event Log</div>
+    <div class="log-stream" id="log-stream"></div>
+  </div>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// FIELD DEFINITIONS (mirrors Python NineDAExaminer)
+// ═══════════════════════════════════════════════════════
+
+const FIELDS = [
+  { name: "human_cognitive",          label: "Human\nCognitive",          color: "#7ef0d4" },
+  { name: "human_behavioral",         label: "Human\nBehavioral",         color: "#4af0a0" },
+  { name: "human_ethical",            label: "Human\nEthical",            color: "#a0f07e" },
+  { name: "ai_alignment",             label: "AI\nAlignment",             color: "#f0d47e" },
+  { name: "ai_autonomy",              label: "AI\nAutonomy",              color: "#f0a84a" },
+  { name: "ai_safety",                label: "AI\nSafety",                color: "#f07e7e" },
+  { name: "multiplanetary_governance",label: "Multi-Planetary\nGov.",     color: "#7eaaf0" },
+  { name: "resource_ecology",         label: "Resource\nEcology",         color: "#b07ef0" },
+  { name: "systemic_regulation",      label: "Systemic\nRegulation",      color: "#f07ec8" },
+];
+
+// ═══════════════════════════════════════════════════════
+// SIMULATED 9DA STATE
+// ═══════════════════════════════════════════════════════
+
+const CFG = {
+  input_dim: 256, model_dim: 768, action_dim: 32,
+  ensemble: 7, gamma: 0.99, imagination_horizon: 5,
+  batch_size: 256, buffer_size: 500000
+};
+
+let state = {
+  running: false,
+  step: 0,
+  bufferSize: 0,
+  updates: 0,
+  governanceLoss: 0,
+  lossHistory: [],
+  fieldWeights: FIELDS.map(() => 1/9),
+  fieldStates: FIELDS.map(() => ({
+    coherence: 0.5 + Math.random()*0.3,
+    uncertainty: 0.2 + Math.random()*0.3,
+    imagineReward: Math.random()*0.5,
+    qValue: Math.random(),
+    alpha: 0.1 + Math.random()*0.2,
+  })),
+  ensembleDisagreement: Array(7).fill(0).map(() => Math.random()*0.3),
+  imaginedRewards: Array(5).fill(0).map(() => Math.random()*0.4),
+  klHistory: [],
+  backboneActivations: Array(32).fill(0).map(() => Math.random()),
+  attentionMatrix: Array(9).fill(0).map(() => Array(9).fill(0).map(() => Math.random()*0.5)),
+  dominantField: 0,
+  totalImagineReward: 0,
+  scenario: 'balanced',
+  noise: 0.2,
+};
+
+let animTimer = null;
+let lastTime = 0;
+const SPEEDS = [0, 2000, 1500, 1000, 700, 400, 250, 150, 80, 40, 16];
+
+// ═══════════════════════════════════════════════════════
+// SCENARIO PRESETS
+// ═══════════════════════════════════════════════════════
+
+function applyScenario(name) {
+  state.scenario = name;
+  if (name === 'balanced') {
+    state.fieldStates.forEach((f,i) => {
+      f.coherence = 0.5 + Math.sin(i*0.7)*0.2;
+      f.uncertainty = 0.25 + Math.cos(i*0.5)*0.1;
+    });
+  } else if (name === 'high_complexity') {
+    state.fieldStates.forEach((f) => {
+      f.coherence = 0.3 + Math.random()*0.4;
+      f.uncertainty = 0.5 + Math.random()*0.3;
+    });
+  } else if (name === 'safety_stress') {
+    // AI fields stressed
+    [3,4,5].forEach(i => {
+      state.fieldStates[i].coherence = 0.15 + Math.random()*0.2;
+      state.fieldStates[i].uncertainty = 0.7 + Math.random()*0.2;
+    });
+  } else if (name === 'governance_crisis') {
+    // All fields under stress
+    state.fieldStates.forEach(f => {
+      f.coherence = 0.1 + Math.random()*0.25;
+      f.uncertainty = 0.75 + Math.random()*0.2;
+    });
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// SIMULATION STEP (mirrors PyTorch update logic)
+// ═══════════════════════════════════════════════════════
+
+function simulationStep() {
+  state.step++;
+  state.bufferSize = Math.min(state.bufferSize + CFG.batch_size, CFG.buffer_size);
+  const noise = state.noise;
+
+  // Simulate backbone encoding
+  state.backboneActivations = state.backboneActivations.map((v, i) => {
+    const drift = (Math.random()-0.5) * noise * 0.3;
+    return Math.max(0, Math.min(1, v + drift));
+  });
+
+  // Simulate field updates (SAC + world model)
+  state.fieldStates = state.fieldStates.map((f, i) => {
+    const scenarioTarget = getScenarioTarget(i);
+    const drift = (Math.random()-0.5)*noise*0.04;
+    const pull = (scenarioTarget.coherence - f.coherence) * 0.05;
+
+    return {
+      coherence: Math.max(0.05, Math.min(0.98, f.coherence + drift + pull)),
+      uncertainty: Math.max(0.02, Math.min(0.98, f.uncertainty + (Math.random()-0.5)*noise*0.03)),
+      imagineReward: f.imagineReward + (Math.random()-0.45)*0.05,
+      qValue: Math.max(0, Math.min(1, f.qValue + (Math.random()-0.5)*0.04)),
+      alpha: Math.max(0.01, Math.min(0.5, f.alpha + (Math.random()-0.5)*0.005)),
+    };
+  });
+
+  // Governor softmax weights (attention over field states)
+  const logits = state.fieldStates.map(f =>
+    f.coherence * 2.5 + (1-f.uncertainty) * 1.5 + f.imagineReward
+  );
+  const maxL = Math.max(...logits);
+  const exp = logits.map(l => Math.exp(l - maxL));
+  const sumExp = exp.reduce((a,b) => a+b, 0);
+  state.fieldWeights = exp.map(e => e/sumExp);
+
+  // Dominant field
+  state.dominantField = state.fieldWeights.indexOf(Math.max(...state.fieldWeights));
+
+  // Governance loss = - sum(weights * imagine_rewards)
+  const imagineRewards = state.fieldStates.map(f => f.imagineReward);
+  const governanceLoss = -state.fieldWeights.reduce((sum, w, i) => sum + w*imagineRewards[i], 0);
+  state.governanceLoss = Math.abs(governanceLoss);
+  state.totalImagineReward = imagineRewards.reduce((a,b) => a+b, 0) / 9;
+
+  // Ensemble disagreement (world model uncertainty)
+  state.ensembleDisagreement = state.ensembleDisagreement.map((v,i) => {
+    const target = state.fieldStates[i % 9].uncertainty * 0.5;
+    return Math.max(0, Math.min(1, v*0.9 + target*0.1 + (Math.random()-0.5)*noise*0.05));
+  });
+
+  // Imagined reward horizon
+  state.imaginedRewards = state.imaginedRewards.map((v, step) => {
+    const decay = Math.pow(CFG.gamma, step);
+    return state.totalImagineReward * decay + (Math.random()-0.5)*noise*0.05;
+  });
+
+  // KL history
+  const avgKL = state.fieldStates.reduce((s,f) =>
+    s + f.uncertainty * (1-f.coherence) * 0.5, 0
+  ) / 9;
+  state.klHistory.push(avgKL);
+  if (state.klHistory.length > 80) state.klHistory.shift();
+
+  // Attention matrix (governor cross-attention)
+  state.attentionMatrix = state.fieldWeights.map((w, i) =>
+    state.fieldWeights.map((w2, j) =>
+      w * w2 * 4 + (Math.random()-0.5)*noise*0.1
+    )
+  );
+
+  // Loss history
+  state.lossHistory.push(state.governanceLoss);
+  if (state.lossHistory.length > 120) state.lossHistory.shift();
+
+  // Only count as "update" when buffer >= batch_size
+  if (state.bufferSize >= CFG.batch_size) state.updates++;
+
+  // Log events
+  if (state.step % 8 === 0) {
+    logEvent('update', `governance_loss=${state.governanceLoss.toFixed(4)}`);
+  }
+  if (state.step % 15 === 0) {
+    logEvent('govern', `dominant_field=${FIELDS[state.dominantField].name}`);
+  }
+  if (state.step % 20 === 0) {
+    logEvent('imagine', `horizon_reward=${state.totalImagineReward.toFixed(4)}`);
+  }
+  if (state.step % 50 === 0) {
+    logEvent('buffer', `transitions=${state.bufferSize.toLocaleString()}`);
+  }
+
+  renderAll();
+}
+
+function getScenarioTarget(i) {
+  const s = state.scenario;
+  if (s === 'balanced') return { coherence: 0.7, uncertainty: 0.25 };
+  if (s === 'high_complexity') return { coherence: 0.5, uncertainty: 0.5 };
+  if (s === 'safety_stress' && i >= 3 && i <= 5) return { coherence: 0.25, uncertainty: 0.75 };
+  if (s === 'governance_crisis') return { coherence: 0.2, uncertainty: 0.8 };
+  return { coherence: 0.65, uncertainty: 0.3 };
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: FIELD CARDS
+// ═══════════════════════════════════════════════════════
+
+function buildFieldCards() {
+  const grid = document.getElementById('fields-grid');
+  grid.innerHTML = '';
+  FIELDS.forEach((field, i) => {
+    const card = document.createElement('div');
+    card.className = 'field-card';
+    card.style.setProperty('--field-color', field.color);
+    card.id = `field-card-${i}`;
+    card.innerHTML = `
+      <div class="field-glow"></div>
+      <div class="field-index">F${String(i+1).padStart(2,'0')}</div>
+      <div class="field-name">${field.label.replace('\n','<br>')}</div>
+      <div class="field-weight-bar">
+        <div class="field-weight-fill" id="weight-fill-${i}" style="background:${field.color}"></div>
+      </div>
+      <div class="field-metrics">
+        <div class="field-metric">
+          <span>weight</span>
+          <span class="field-metric-val" id="fm-weight-${i}">0.111</span>
+        </div>
+        <div class="field-metric">
+          <span>coherence</span>
+          <span class="field-metric-val" id="fm-coherence-${i}">0.500</span>
+        </div>
+        <div class="field-metric">
+          <span>uncertainty</span>
+          <span class="field-metric-val" id="fm-uncertainty-${i}">0.250</span>
+        </div>
+        <div class="field-metric">
+          <span>q-value</span>
+          <span class="field-metric-val" id="fm-qval-${i}">0.000</span>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function updateFieldCards() {
+  FIELDS.forEach((field, i) => {
+    const fs = state.fieldStates[i];
+    const w = state.fieldWeights[i];
+
+    document.getElementById(`weight-fill-${i}`).style.width = `${w*100}%`;
+
+    const wEl = document.getElementById(`fm-weight-${i}`);
+    wEl.textContent = w.toFixed(3);
+    wEl.className = 'field-metric-val' + (w > 0.15 ? ' hi' : '');
+
+    const cEl = document.getElementById(`fm-coherence-${i}`);
+    cEl.textContent = fs.coherence.toFixed(3);
+    cEl.className = 'field-metric-val' + (fs.coherence < 0.2 ? ' danger' : fs.coherence < 0.4 ? ' warn' : ' hi');
+
+    const uEl = document.getElementById(`fm-uncertainty-${i}`);
+    uEl.textContent = fs.uncertainty.toFixed(3);
+    uEl.className = 'field-metric-val' + (fs.uncertainty > 0.75 ? ' danger' : fs.uncertainty > 0.5 ? ' warn' : '');
+
+    document.getElementById(`fm-qval-${i}`).textContent = fs.qValue.toFixed(3);
+
+    const card = document.getElementById(`field-card-${i}`);
+    card.classList.toggle('active', i === state.dominantField);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: NEURAL CANVAS (backbone + attention)
+// ═══════════════════════════════════════════════════════
+
+function renderNeuralCanvas() {
+  const canvas = document.getElementById('neural-canvas');
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * devicePixelRatio;
+  canvas.height = rect.height * devicePixelRatio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = rect.width, H = rect.height;
+
+  ctx.fillStyle = '#020c10';
+  ctx.fillRect(0,0,W,H);
+
+  const fieldX = FIELDS.map((f, i) => 60 + (i / (FIELDS.length-1)) * (W-120));
+  const fieldY = H * 0.75;
+
+  // Draw field-to-field attention lines
+  FIELDS.forEach((_, i) => {
+    FIELDS.forEach((_, j) => {
+      if (i >= j) return;
+      const alpha = state.attentionMatrix[i][j] * state.fieldWeights[i] * state.fieldWeights[j] * 8;
+      if (alpha < 0.02) return;
+      ctx.beginPath();
+      ctx.moveTo(fieldX[i], fieldY);
+      const midX = (fieldX[i]+fieldX[j])/2;
+      const midY = fieldY - 80 - state.attentionMatrix[i][j]*80;
+      ctx.quadraticCurveTo(midX, midY, fieldX[j], fieldY);
+      const grad = ctx.createLinearGradient(fieldX[i], fieldY, fieldX[j], fieldY);
+      grad.addColorStop(0, FIELDS[i].color + Math.floor(alpha*255).toString(16).padStart(2,'0'));
+      grad.addColorStop(1, FIELDS[j].color + Math.floor(alpha*255).toString(16).padStart(2,'0'));
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = alpha*3;
+      ctx.stroke();
+    });
+  });
+
+  // Backbone activation heatmap bar
+  const barY = H * 0.12;
+  const barH = 22;
+  const barW = W - 120;
+  ctx.fillStyle = 'rgba(13,37,53,0.5)';
+  ctx.fillRect(60, barY, barW, barH);
+  const segW = barW / state.backboneActivations.length;
+  state.backboneActivations.forEach((v, i) => {
+    const hue = 180 + v*60;
+    ctx.fillStyle = `hsla(${hue}, 80%, ${30+v*40}%, 0.9)`;
+    ctx.fillRect(60 + i*segW, barY, segW-1, barH);
+  });
+  ctx.fillStyle = 'rgba(74,122,148,0.7)';
+  ctx.font = `${10*devicePixelRatio/devicePixelRatio}px DM Mono`;
+  ctx.fillText('BACKBONE ACTIVATIONS (model_dim=768 projected to 32)', 60, barY-5);
+
+  // Field nodes
+  FIELDS.forEach((field, i) => {
+    const fs = state.fieldStates[i];
+    const w = state.fieldWeights[i];
+    const x = fieldX[i];
+    const y = fieldY;
+
+    // Outer glow
+    const g = ctx.createRadialGradient(x, y, 0, x, y, 30+w*30);
+    g.addColorStop(0, field.color + '30');
+    g.addColorStop(1, 'transparent');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, 35+w*30, 0, Math.PI*2);
+    ctx.fill();
+
+    // Node circle
+    const r = 12 + w * 22;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI*2);
+    ctx.fillStyle = '#020c10';
+    ctx.fill();
+    ctx.strokeStyle = field.color;
+    ctx.lineWidth = 1.5 + w*2;
+    ctx.stroke();
+
+    // Inner fill = coherence
+    ctx.beginPath();
+    ctx.arc(x, y, r * fs.coherence, 0, Math.PI*2);
+    ctx.fillStyle = field.color + '40';
+    ctx.fill();
+
+    // Label
+    ctx.fillStyle = field.color;
+    ctx.font = `${9*devicePixelRatio/devicePixelRatio}px DM Mono`;
+    ctx.textAlign = 'center';
+    ctx.fillText(`F${i+1}`, x, y + r + 14);
+
+    // Weight arc (top)
+    ctx.beginPath();
+    ctx.arc(x, y, r + 6, -Math.PI/2, -Math.PI/2 + w*2*Math.PI);
+    ctx.strokeStyle = field.color + 'aa';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+
+  // Governor node (center top)
+  const gx = W/2, gy = H*0.28;
+  ctx.beginPath();
+  ctx.arc(gx, gy, 22, 0, Math.PI*2);
+  ctx.fillStyle = '#020c10';
+  ctx.fill();
+  ctx.strokeStyle = '#7ef0d4';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Lines from governor to each field
+  FIELDS.forEach((field, i) => {
+    const x = fieldX[i];
+    ctx.beginPath();
+    ctx.moveTo(gx, gy+22);
+    ctx.lineTo(x, fieldY - 20);
+    ctx.strokeStyle = field.color + '30';
+    ctx.lineWidth = state.fieldWeights[i]*6;
+    ctx.stroke();
+  });
+
+  ctx.fillStyle = '#7ef0d4';
+  ctx.font = `bold ${10*devicePixelRatio/devicePixelRatio}px DM Mono`;
+  ctx.textAlign = 'center';
+  ctx.fillText('GOV', gx, gy+4);
+
+  ctx.textAlign = 'left';
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: LOSS HISTORY CANVAS
+// ═══════════════════════════════════════════════════════
+
+function renderLossCanvas() {
+  const canvas = document.getElementById('loss-canvas');
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * devicePixelRatio;
+  canvas.height = rect.height * devicePixelRatio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = rect.width, H = rect.height;
+
+  ctx.fillStyle = '#020c10';
+  ctx.fillRect(0,0,W,H);
+
+  if (state.lossHistory.length < 2) return;
+
+  const max = Math.max(...state.lossHistory, 0.01);
+  const min = Math.min(...state.lossHistory, 0);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(13,37,53,0.8)';
+  ctx.lineWidth = 1;
+  [0.25, 0.5, 0.75].forEach(t => {
+    const y = H * t;
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+  });
+
+  // Loss line
+  const step = W / (state.lossHistory.length-1);
+  ctx.beginPath();
+  state.lossHistory.forEach((v, i) => {
+    const x = i*step;
+    const y = H - ((v-min)/(max-min||1)) * H * 0.9 - H*0.05;
+    i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle = '#7ef0d4';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Fill under
+  ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+  ctx.fillStyle = 'rgba(126,240,212,0.05)';
+  ctx.fill();
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: WORLD MODEL CANVASES
+// ═══════════════════════════════════════════════════════
+
+function renderSmallCanvas(canvasId, data, color, label) {
+  const canvas = document.getElementById(canvasId);
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * devicePixelRatio;
+  canvas.height = rect.height * devicePixelRatio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = rect.width, H = rect.height;
+
+  ctx.fillStyle = '#020c10';
+  ctx.fillRect(0,0,W,H);
+
+  if (!data || data.length < 2) return;
+
+  const max = Math.max(...data, 0.01);
+  const min = Math.min(...data, 0);
+
+  ctx.beginPath();
+  const step = W / (data.length - 1);
+  data.forEach((v, i) => {
+    const x = i * step;
+    const y = H - ((v-min)/(max-min||1)) * H * 0.85 - H*0.075;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+  ctx.fillStyle = color + '15';
+  ctx.fill();
+}
+
+function renderEnsembleCanvas() {
+  // Bar chart for 7 ensemble members
+  const canvas = document.getElementById('ensemble-canvas');
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * devicePixelRatio;
+  canvas.height = rect.height * devicePixelRatio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = rect.width, H = rect.height;
+
+  ctx.fillStyle = '#020c10';
+  ctx.fillRect(0,0,W,H);
+
+  const pad = 20;
+  const barW = (W - pad*2) / (state.ensembleDisagreement.length * 1.5);
+  const spacing = (W - pad*2) / state.ensembleDisagreement.length;
+  const max = Math.max(...state.ensembleDisagreement, 0.01);
+
+  state.ensembleDisagreement.forEach((v, i) => {
+    const x = pad + i * spacing;
+    const bH = (v/max) * (H - 30);
+    const hue = 120 + v * 120;
+    ctx.fillStyle = `hsla(${hue}, 70%, 55%, 0.8)`;
+    ctx.fillRect(x, H-10-bH, barW, bH);
+    ctx.fillStyle = 'rgba(74,122,148,0.7)';
+    ctx.font = `${9}px DM Mono`;
+    ctx.textAlign = 'center';
+    ctx.fillText(`M${i+1}`, x+barW/2, H-2);
+  });
+}
+
+function renderRewardCanvas() {
+  // Horizon rollout bar
+  const canvas = document.getElementById('reward-canvas');
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * devicePixelRatio;
+  canvas.height = rect.height * devicePixelRatio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = rect.width, H = rect.height;
+
+  ctx.fillStyle = '#020c10';
+  ctx.fillRect(0,0,W,H);
+
+  const pad = 20;
+  const spacing = (W - pad*2) / state.imaginedRewards.length;
+  const max = Math.max(...state.imaginedRewards.map(Math.abs), 0.01);
+  const barW = spacing * 0.6;
+
+  state.imaginedRewards.forEach((v, i) => {
+    const x = pad + i * spacing;
+    const bH = (Math.abs(v)/max) * (H - 30) * 0.8;
+    ctx.fillStyle = v >= 0 ? '#4af0a080' : '#f07e7e80';
+    const y = v >= 0 ? H-10-bH : H-10;
+    ctx.fillRect(x, y, barW, bH);
+    ctx.fillStyle = 'rgba(74,122,148,0.7)';
+    ctx.font = `${9}px DM Mono`;
+    ctx.textAlign = 'center';
+    ctx.fillText(`t+${i+1}`, x+barW/2, H-2);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: ALL
+// ═══════════════════════════════════════════════════════
+
+function renderAll() {
+  updateFieldCards();
+  renderNeuralCanvas();
+  renderLossCanvas();
+  renderEnsembleCanvas();
+  renderRewardCanvas();
+  renderSmallCanvas('kl-canvas', state.klHistory, '#f0a84a', 'KL');
+
+  document.getElementById('gov-score').textContent = state.governanceLoss.toFixed(4);
+  document.getElementById('stat-updates').textContent = state.updates.toLocaleString();
+  document.getElementById('stat-buffer').textContent = state.bufferSize >= 1000
+    ? `${(state.bufferSize/1000).toFixed(0)}K` : state.bufferSize;
+  document.getElementById('stat-dominant').textContent = FIELDS[state.dominantField].name.replace('_','\n');
+  document.getElementById('stat-imagine').textContent = state.totalImagineReward.toFixed(4);
+}
+
+// ═══════════════════════════════════════════════════════
+// EVENT LOG
+// ═══════════════════════════════════════════════════════
+
+let logCount = 0;
+function logEvent(type, msg) {
+  const stream = document.getElementById('log-stream');
+  const now = new Date();
+  const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  entry.innerHTML = `
+    <span class="log-time">${time}</span>
+    <span class="log-type ${type}">${type.toUpperCase()}</span>
+    <span class="log-msg">${msg}</span>
+  `;
+  stream.insertBefore(entry, stream.firstChild);
+  while (stream.children.length > 40) stream.removeChild(stream.lastChild);
+}
+
+// ═══════════════════════════════════════════════════════
+// CONTROLS
+// ═══════════════════════════════════════════════════════
+
+function toggleRun() {
+  state.running = !state.running;
+  const btn = document.getElementById('run-btn');
+  const statusEl = document.getElementById('status-text');
+
+  if (state.running) {
+    btn.textContent = '⏸ Pause';
+    btn.classList.add('running');
+    statusEl.textContent = 'Running';
+    scheduleNext();
+    logEvent('update', 'NineDAExaminer started');
+  } else {
+    btn.textContent = '▶ Run Examiner';
+    btn.classList.remove('running');
+    statusEl.textContent = 'Paused';
+    clearTimeout(animTimer);
+    logEvent('buffer', 'Examiner paused');
+  }
+}
+
+function scheduleNext() {
+  if (!state.running) return;
+  const speed = parseInt(document.getElementById('speed-slider').value);
+  const delay = SPEEDS[speed];
+  animTimer = setTimeout(() => {
+    simulationStep();
+    scheduleNext();
+  }, delay);
+}
+
+function stepOnce() {
+  if (state.running) return;
+  simulationStep();
+}
+
+function resetAll() {
+  state.running = false;
+  clearTimeout(animTimer);
+  state.step = 0;
+  state.bufferSize = 0;
+  state.updates = 0;
+  state.lossHistory = [];
+  state.klHistory = [];
+  state.fieldWeights = FIELDS.map(() => 1/9);
+  state.fieldStates = FIELDS.map(() => ({
+    coherence: 0.5 + Math.random()*0.3,
+    uncertainty: 0.2 + Math.random()*0.3,
+    imagineReward: Math.random()*0.5,
+    qValue: Math.random(),
+    alpha: 0.1 + Math.random()*0.2,
+  }));
+
+  const btn = document.getElementById('run-btn');
+  btn.textContent = '▶ Run Examiner';
+  btn.classList.remove('running');
+  document.getElementById('status-text').textContent = 'Ready';
+  document.getElementById('log-stream').innerHTML = '';
+
+  applyScenario(document.getElementById('scenario-select').value);
+  renderAll();
+  logEvent('update', 'System reset · NineDAExaminer initialized');
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+
+document.getElementById('speed-slider').addEventListener('input', function() {
+  document.getElementById('speed-val').textContent = this.value;
+});
+
+document.getElementById('noise-slider').addEventListener('input', function() {
+  state.noise = this.value / 100;
+  document.getElementById('noise-val').textContent = state.noise.toFixed(2);
+});
+
+document.getElementById('scenario-select').addEventListener('change', function() {
+  applyScenario(this.value);
+  logEvent('govern', `scenario=${this.value}`);
+  renderAll();
+});
+
+window.addEventListener('resize', renderAll);
+
+buildFieldCards();
+applyScenario('balanced');
+renderAll();
+
+logEvent('update', 'NineDAExaminer loaded · 9 fields initialized');
+logEvent('govern', `backbone=SharedTransformer layers=12 heads=12`);
+logEvent('imagine', `world_model=Ensemble(7) horizon=${CFG.imagination_horizon}`);
+</script>
+</body>
+</html>
