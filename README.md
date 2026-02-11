@@ -25,10 +25,6 @@ Governance protocol: [9DA-Core](https://github.com/9DAtm/9DA-Core)
 
 “If you’re using this architecture in research or tooling, attribution is appreciated.” Zdenka
 
-[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
-[![9DA™](https://img.shields.io/badge/9DA™-Registered%20Trademark-00ffc8.svg)](https://github.com/9DAtm/9DA)
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
-
 > **[▶ Watch Live Demo: 9DA™ NINE FIELDS](https://9datm.github.io/multidimensional-self-expanding-agent/demo_nine_fields.html)**
 >
 > **[▶ Watch Live Demo: 9DA™ COUNTERFACTUAL](https://9datm.github.io/multidimensional-self-expanding-agent/demo_counterfactual.html)**
@@ -285,14 +281,14 @@ python -m examples.awareness_continuum_example
 
 ## Legal
 
-9DA™ is a registered trademark. The entirety of the 9DA™ Framework, including naming, structure, conceptual architecture, applied domains, and visual identity, is proprietary intellectual property of Zdenka Cucin, Originator and Lead Developer.
+9DA™ is a registered trademark of Zdenka Cucin.
 
-This repository is provided for evaluation and testing purposes only.
-See [LICENSE](LICENSE) for full terms.
+**Governance protocol** (`9DA-Core`): open source under Apache-2.0
+→ https://github.com/9DAtm/9DA-Core
 
-For licensing inquiries: [https://github.com/9DAtm](https://github.com/9DAtm)
+**Framework implementation** (this repository): proprietary intellectual property of Zdenka Cucin.
+Provided for evaluation, research, and testing purposes only.
+Commercial licensing available → https://github.com/9DAtm
 
 © 2025 Zdenka Cucin. All Rights Reserved.
-
-
-© 2025 Zdenka Cucin. All Rights Reserved.
+```
