@@ -1,4 +1,25 @@
 # 9DA™  Governed Autonomous Agent Architecture
+## Evaluation Infrastructure for Governed Autonomy
+
+The field-wide AI evaluation gap requires benchmarks measuring:
+- Long-horizon coherence retention
+- World modeling under uncertainty
+- Know-when-to-stop behaviour
+- Explainable, auditable decisions
+
+9DA™ is not just an agent framework. It is the architectural substrate
+for benchmarking these properties — the things current benchmarks
+(Terminal-Bench, ARC-AGI, METR) do not yet measure.
+
+| What Benchmarks Need | What 9DA Provides |
+|---|---|
+| Long-horizon coherence measurement | `continuity.py` + Governor tracking |
+| World model uncertainty quantification | `WorldModel` ensemble (7 members) |
+| Know-when-to-stop enforcement | `invariants.py` hard stops |
+| Explainable decision rubrics | `explainability.py` + `counterfactual.py` |
+| Multi-factor output audit | `self_evaluation.py` |
+
+Governance protocol: [9DA-Core](https://github.com/9DAtm/9DA-Core)
 
 **A Research-Grade Framework for Auditable, Self-Bounded AI Systems**
 
