@@ -8,7 +8,7 @@
 [![9DA™](https://img.shields.io/badge/9DA™-Registered%20Trademark-00ffc8.svg)](https://github.com/9DAtm/9DA)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 
-> **[▶ Watch Live Demo: 9DA™ COUNTERFACTUAL](https://9datm.github.io/multidimensional-self-expanding-agent/demo_nine_fields.html)**
+> **[▶ Watch Live Demo: 9DA™ NINE FIELDS](https://9datm.github.io/multidimensional-self-expanding-agent/demo_nine_fields.html)**
 >
 > **[▶ Watch Live Demo: 9DA™ COUNTERFACTUAL](https://9datm.github.io/multidimensional-self-expanding-agent/demo_counterfactual.html)**
 > 
