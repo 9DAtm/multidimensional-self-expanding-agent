@@ -5,7 +5,7 @@ This software is licensed under the 9DA™ Proprietary License.
 
 See LICENSE for full terms. For commercial licensing enquiries, contact info@9da.org
 
-**[▶ License: 9DA™ Proprietary](https://github.com/9DAtm/multidimensional-self-expanding-agent/main/9DA_Proprietary_License.md)**
+**[▶ License: 9DA™ Proprietary](https://github.com/9DAtm/multidimensional-self-expanding-agent/blob/main/9DA_Proprietary_License.md)**
 
 The field-wide AI evaluation gap requires benchmarks measuring:
 - Long-horizon coherence retention
